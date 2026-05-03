@@ -1,4 +1,4 @@
-import * as path from 'node:path';
+import { dirname } from 'node:path';
 import * as ts from 'typescript';
 import { locateClasses } from '../classes/locateClasses';
 import type { ClassQueryOptions } from '../classes/types';
@@ -6,6 +6,7 @@ import { locateFiles } from '../files/locateFiles';
 import type { FileQueryOptions } from '../files/types';
 import { locateFunctions } from '../functions/locateFunctions';
 import type { FunctionQueryOptions } from '../functions/types';
+import { checkLayeredArchitecture } from '../layers/checkLayeredArchitecture';
 import { createLayeredArchitecture } from '../layers/createLayeredArchitecture';
 import { layer } from '../layers/layer';
 import { layerShouldNotBeAccessedByAnyLayer } from '../layers/layerShouldNotBeAccessedByAnyLayer';
@@ -27,7 +28,7 @@ export function parseProject(options: { tsConfigFilePath?: string } = {}) {
     const parsedCommandLine = ts.parseJsonConfigFileContent(
       configFile.config,
       ts.sys,
-      path.dirname(configPath),
+      dirname(configPath),
       undefined,
       configPath,
       undefined,
@@ -116,6 +117,9 @@ export function parseProject(options: { tsConfigFilePath?: string } = {}) {
       options: compilerOptions,
       host: host,
     });
+
+    // Force the TypeScript compiler to bind the AST and populate .parent pointers
+    program.getTypeChecker();
   } else {
     throw new Error('Could not find tsconfig.json');
   }
@@ -165,6 +169,7 @@ export function parseProject(options: { tsConfigFilePath?: string } = {}) {
             },
           };
         },
+        check: () => checkLayeredArchitecture(data),
         get data() {
           return data;
         },

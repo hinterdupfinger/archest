@@ -1,4 +1,4 @@
-import { buildRule } from '../utils/ruleBuilder';
+import { ruleBuilder } from '../utils/ruleBuilder';
 
 export function sharedCheckHaveMaxCyclomaticComplexity<T>(
   items: T[],
@@ -8,7 +8,7 @@ export function sharedCheckHaveMaxCyclomaticComplexity<T>(
   max: number,
   isNot: boolean,
 ) {
-  return buildRule(items, isNot, (item) => {
+  return ruleBuilder(items, isNot, (item) => {
     const name = getName(item);
     const complexity = getComplexity(item);
     const exceeds = complexity > max;

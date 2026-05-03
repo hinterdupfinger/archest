@@ -1,4 +1,4 @@
-import { buildRule } from '../utils/ruleBuilder';
+import { ruleBuilder } from '../utils/ruleBuilder';
 
 export function sharedCheckMatchNamePattern<T>(
   items: T[],
@@ -9,7 +9,7 @@ export function sharedCheckMatchNamePattern<T>(
 ) {
   const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern;
 
-  return buildRule(items, isNot, (item) => {
+  return ruleBuilder(items, isNot, (item) => {
     const name = getName(item);
     const passes = name ? regex.test(name) : false;
     const desc = `${label} ${name || 'Anonymous'}`;

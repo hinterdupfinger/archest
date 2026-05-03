@@ -111,7 +111,10 @@ describe('@archest/vitest', () => {
 
   describe('Granular Folder Structure', () => {
     it('functions should have a name matching their filename', () => {
-      const coreFunctions = project.getFunctions({ inFolder: 'core' });
+      const coreFunctions = project.getFunctions({
+        inFolder: 'core',
+        isTopLevel: true,
+      });
       expect(coreFunctions).toHaveNameMatchingFileName();
     });
 
@@ -132,7 +135,10 @@ describe('@archest/vitest', () => {
 
   describe('Shared Abstraction Layer', () => {
     it('shared abstraction functions should be prefixed with sharedCheck', () => {
-      const sharedFunctions = project.getFunctions({ inFolder: 'core/shared' });
+      const sharedFunctions = project.getFunctions({
+        inFolder: 'core/shared',
+        isTopLevel: true,
+      });
       expect(sharedFunctions).toMatchNamePattern(/^sharedCheck/);
     });
 

@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import * as ts from 'typescript';
-import { buildRule } from '../utils/ruleBuilder';
+import { ruleBuilder } from '../utils/ruleBuilder';
 
 export function sharedCheckHaveNameMatchingFileName<T extends ts.Node>(
   items: T[],
@@ -8,7 +8,7 @@ export function sharedCheckHaveNameMatchingFileName<T extends ts.Node>(
   label: string,
   isNot: boolean,
 ) {
-  return buildRule(items, isNot, (item) => {
+  return ruleBuilder(items, isNot, (item) => {
     const name = getName(item);
     const sourceFile = item.getSourceFile
       ? item.getSourceFile()

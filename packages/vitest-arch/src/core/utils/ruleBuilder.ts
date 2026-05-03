@@ -1,6 +1,6 @@
 import type { RuleResult } from '../types';
 
-export function buildRule<T>(
+export function ruleBuilder<T>(
   items: T[],
   isNot: boolean,
   evaluate: (item: T) => {

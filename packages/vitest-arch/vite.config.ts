@@ -10,7 +10,7 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`,
     },
     rollupOptions: {
-      external: ['typescript', 'vitest', 'path', 'fs'],
+      external: ['typescript', 'vitest', 'path', 'fs', 'node:path', 'node:fs'],
     },
     sourcemap: true,
   },

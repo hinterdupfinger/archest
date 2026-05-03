@@ -1,5 +1,5 @@
 import * as ts from 'typescript';
-import { buildRule } from '../utils/ruleBuilder';
+import { ruleBuilder } from '../utils/ruleBuilder';
 
 export function sharedCheckHaveModifier<T extends ts.Node>(
   items: T[],
@@ -19,11 +19,20 @@ export function sharedCheckHaveModifier<T extends ts.Node>(
     case 'abstract':
       targetKind = ts.SyntaxKind.AbstractKeyword;
       break;
+    case 'async':
+      targetKind = ts.SyntaxKind.AsyncKeyword;
+      break;
+    case 'public':
+      targetKind = ts.SyntaxKind.PublicKeyword;
+      break;
+    case 'private':
+      targetKind = ts.SyntaxKind.PrivateKeyword;
+      break;
     default:
       throw new Error(`Modifier ${modifierStr} is not fully supported.`);
   }
 
-  return buildRule(items, isNot, (item) => {
+  return ruleBuilder(items, isNot, (item) => {
     const name = getName(item);
     const modifiers = ts.canHaveModifiers(item)
       ? ts.getModifiers(item)

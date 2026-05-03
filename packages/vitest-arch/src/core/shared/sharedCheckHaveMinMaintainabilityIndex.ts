@@ -1,4 +1,4 @@
-import { buildRule } from '../utils/ruleBuilder';
+import { ruleBuilder } from '../utils/ruleBuilder';
 
 export function sharedCheckHaveMinMaintainabilityIndex<T>(
   items: T[],
@@ -8,7 +8,7 @@ export function sharedCheckHaveMinMaintainabilityIndex<T>(
   min: number,
   isNot: boolean,
 ) {
-  return buildRule(items, isNot, (item) => {
+  return ruleBuilder(items, isNot, (item) => {
     const name = getName(item);
     const mi = getMi(item);
     const fallsBelow = mi < min;

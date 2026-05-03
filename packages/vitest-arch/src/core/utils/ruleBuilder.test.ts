@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildRule } from './ruleBuilder';
+import { ruleBuilder } from './ruleBuilder';
 
 describe('ruleBuilder edge cases', () => {
   it('should pass if items array is empty', () => {
-    const result = buildRule([], false, () => ({
+    const result = ruleBuilder([], false, () => ({
       passes: false,
       failMessage: '',
       failNotMessage: '',
@@ -13,7 +13,7 @@ describe('ruleBuilder edge cases', () => {
 
   it('should generate correct violation message with NOT', () => {
     const items = [{ name: 'A' }];
-    const result = buildRule(items, true, () => ({
+    const result = ruleBuilder(items, true, () => ({
       passes: true,
       failMessage: '',
       failNotMessage: 'Item A should NOT be nice',
