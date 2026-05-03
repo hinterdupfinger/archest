@@ -1,0 +1,61 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Domine";
+  src: url("/fonts/Domine-VariableFont_wght.ttf") format("truetype");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* You can override the default Infima variables here. */
+:root {
+  --evergreen: #091e05;
+  --dark-spruce: #004f2d;
+  --sweet-peony: #d87cac;
+  --honey-bronze: #f6ae2d;
+  --pastel-pink: #f9b9c3;
+
+  --ifm-font-family-base:
+    "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+    Cantarell, Noto Sans, sans-serif;
+  --ifm-heading-font-family:
+    "Domine", "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto,
+    Ubuntu, Cantarell, Noto Sans, sans-serif;
+
+  --ifm-color-primary: #004f2d;
+  --ifm-color-primary-dark: #004729;
+  --ifm-color-primary-darker: #004326;
+  --ifm-color-primary-darkest: #00371f;
+  --ifm-color-primary-light: #1a6142;
+  --ifm-color-primary-lighter: #26694d;
+  --ifm-color-primary-lightest: #4d846c;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme="dark"] {
+  --ifm-color-primary: #f6ae2d;
+  --ifm-color-primary-dark: #dd9d29;
+  --ifm-color-primary-darker: #d19426;
+  --ifm-color-primary-darkest: #ac7a1f;
+  --ifm-color-primary-light: #f7b642;
+  --ifm-color-primary-lighter: #f7ba4d;
+  --ifm-color-primary-lightest: #f9c66c;
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}

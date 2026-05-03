@@ -1,0 +1,14 @@
+{
+  "name": "basic-usage",
+  "private": true,
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@archest/vitest": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.5",
+    "typescript": "^5.x"
+  }
+}

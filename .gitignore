@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+.pnpm-store
+
+# testing
+coverage/
+
+# production
+build/
+dist/
+
+# docusaurus
+.docusaurus/
+
+# misc
+.DS_Store
+*.log
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# typescript
+*.tsbuildinfo
+
+.DS_Store
