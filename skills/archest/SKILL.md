@@ -1,6 +1,7 @@
 ---
 name: archest
-description: Write architecture tests using @archest/vitest to enforce strict folder, layer, and dependency boundaries.
+description: >
+  Use this skill when the user wants to write, modify, or verify architecture tests, fitness functions, or structural rules. Apply this when the user needs to enforce folder boundaries, layer separation, naming conventions, or dependency restrictions in TypeScript projects, even if they don't explicitly mention "@archest/vitest".
 ---
 
 # Writing Architecture Tests with @archest/vitest
@@ -22,6 +23,15 @@ describe('Architecture Rules', () => {
   // ...
 });
 ```
+
+## Step-by-Step Workflow (Plan-Validate-Execute)
+
+When tasked with writing an architecture test, use the following procedural workflow:
+
+1. **Plan & Analyze**: Identify the specific architectural rule or fitness function the user wants to enforce (e.g., "Domain layer must not depend on UI").
+2. **Query (Locate)**: Use `parseProject()` to isolate the relevant structural elements (Files, Classes, Functions, or Slices).
+3. **Assert (Execute)**: Apply the correct structural matcher to the located elements.
+4. **Validate**: Always run the test (e.g., `vitest run` or `pnpm build && pnpm -r test` in a monorepo) to verify the rule passes against the current codebase. Fix any violations or adjust the rule if it was too strict.
 
 ## Locating Code Elements
 
@@ -69,12 +79,35 @@ Use native Vitest `expect()` chains with the custom matchers provided by Archest
 - `.toHaveExplicitReturnType()`: Asserts that a function explicitly declares a return type.
 
 ### Macro Architecture Matchers
-- `.toBeFreeOfCycles()`: Performs a deep AST graph traversal to ensure the files have zero circular dependencies. **Note**: Call this on specific domain bounds (e.g., `project.getFiles({ inFolder: 'domain' }).toBeFreeOfCycles()`) rather than the entire project for performance.
+- `.toBeFreeOfCycles()`: Performs a deep AST graph traversal to ensure the files have zero circular dependencies.
 
 ### Structural Metrics
 - `.toHaveMaxCyclomaticComplexity(max)`: Asserts that a File, Class, or Function does not exceed a maximum cyclomatic complexity.
 - `.toHaveMinMaintainabilityIndex(min)`: Asserts that a File or Function has at least the minimum Maintainability Index.
 - `.toHaveMaxDistanceFromMainSequence(max)`: Asserts that an Architectural Slice has a maximum Distance from the Main Sequence (balance between Abstractness and Instability).
+
+## Evolutionary Architecture & Fitness Functions
+
+Archest is designed to be a tool for **Evolutionary Architecture**. As systems evolve, their architectural characteristics (e.g., modularity, coupling, maintainability) often degrade over time. 
+
+To protect against this, you should write tests that act as **Automated Architectural Fitness Functions**. 
+- **Metrics as Fitness Functions**: Use Archest's structural metrics (`toHaveMaxCyclomaticComplexity`, `toHaveMinMaintainabilityIndex`, `toHaveMaxDistanceFromMainSequence`) to establish quantitative fitness functions that track the health and agility of the codebase.
+- **Preventing Drift**: By running these tests automatically, you establish a mechanism that prevents "architectural drift" during iterative development.
+
+## Best Practices for Architecture Tests
+
+When writing architectural tests, follow these industry-standard best practices:
+
+1. **Focus on High-Value Rules**: Prioritize critical boundaries (e.g., Domain independence, acyclic dependencies) over overly granular or noisy rules. Only enforce rules you are prepared to maintain.
+2. **Keep Tests Simple & Focused**: Each architecture test should validate exactly *one* rule. This ensures that failures are isolated and easy to diagnose.
+3. **Use Descriptive Naming**: Name tests as living documentation. Use `it('Domain layer must remain independent of Infrastructure')` instead of `it('Check layers')`.
+4. **Treat as Living Documentation**: Well-written architecture tests serve as an accurate, up-to-date roadmap of your design. They act as the single source of truth for onboarding new developers to the project's dependency rules.
+5. **Continuous Integration**: These rules must run automatically on every Pull Request to catch violations before they are merged into the main branch.
+
+## Gotchas
+
+- **Performance of Cycle Detection**: The `.toBeFreeOfCycles()` matcher performs a deep AST graph traversal. Calling this on the entire project is computationally expensive. Always scope it to specific domain bounds (e.g., `project.getFiles({ inFolder: 'domain' }).toBeFreeOfCycles()`).
+- **AST Binding (TypeScript Compiler API)**: If you are manually creating synthetic AST nodes for unit tests or working deep within the `ts.Program`, remember that the TypeScript compiler requires calling `program.getTypeChecker()` to bind the AST and populate `.parent` pointers.
 
 ## Examples
 
