@@ -17,15 +17,15 @@ describe('fileCheckHaveMaxExportedFunctions', () => {
   });
 
   it('should fail if over max exports', () => {
+    const mockFileData = {
+      path: 'test.ts',
+      functions: [{ is_exported: true }, { is_exported: true }],
+    };
+    // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
+    const mockFile = mockFileData as any;
     const data: FileLocatorData = {
       type: 'FileLocator',
-      // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
-      files: [
-        {
-          path: 'test.ts',
-          functions: [{ is_exported: true }, { is_exported: true }],
-        } as any,
-      ],
+      files: [mockFile],
       // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
       projectData: {} as any,
     };

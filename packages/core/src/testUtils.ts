@@ -1,13 +1,7 @@
 import { ArchestProject } from '@archest/core-rust';
 import * as ts from 'typescript';
 
-import type {
-  ClassData,
-  FileData,
-  FunctionData,
-  ProjectData,
-  PropertyData,
-} from './dto';
+import type { ClassData, FunctionData, ProjectData, PropertyData } from './dto';
 
 export function createSourceFile(
   code: string,
@@ -129,6 +123,7 @@ export function getFunctions(
               ?.some((m) => m.kind === ts.SyntaxKind.AsyncKeyword) || false
           : false,
         is_top_level: true,
+        // biome-ignore lint/suspicious/noExplicitAny: Mocking typescript node types for tests
         has_explicit_return_type: !!(node as any).type,
         _filePath: sourceFile.fileName,
       });

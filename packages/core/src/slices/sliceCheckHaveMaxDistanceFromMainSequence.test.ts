@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { createSourceFile } from '../testUtils';
 import { sliceCheckHaveMaxDistanceFromMainSequence } from './sliceCheckHaveMaxDistanceFromMainSequence';
 
 describe('sliceCheckHaveMaxDistanceFromMainSequence', () => {
@@ -22,6 +21,7 @@ describe('sliceCheckHaveMaxDistanceFromMainSequence', () => {
       slicePattern: /.*/,
       sliceIds,
       sliceFiles,
+      // biome-ignore lint/suspicious/noExplicitAny: Mocking TS Program for tests
       program: { files: [] } as any,
     };
 

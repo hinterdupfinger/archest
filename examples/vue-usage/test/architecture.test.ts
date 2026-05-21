@@ -47,11 +47,13 @@ describe('Vue Architecture Rules', () => {
 
       // Use our new matcher to ensure they follow the strict naming convention!
       // (They must either be the setup file itself, or end in .graphql.ts)
+      // biome-ignore lint/suspicious/noExplicitAny: Accessing internal project properties for custom locator
+      const rawProject = project as any;
       const locator = {
         type: 'FileLocator' as const,
         files: filesImportingGraphql,
-        projectData: (project as any).projectData,
-        archestProject: (project as any).archestProject,
+        projectData: rawProject.projectData,
+        archestProject: rawProject.archestProject,
       };
 
       expect(locator).toMatchNamePattern(/(\.graphql\.ts$|setup\.ts$)/);

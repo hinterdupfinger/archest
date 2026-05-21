@@ -4,7 +4,7 @@
  * This interface extends Vitest's `Assertion` interface to provide fluent assertions
  * on your codebase's architectural structure.
  */
-export interface ArchestMatchers<R = unknown> {
+export interface ArchestMatchers<_R = unknown> {
   /**
    * Asserts that the evaluated architectural rule passes.
    * Primarily used for complex rules like LayeredArchitecture.

@@ -1,5 +1,4 @@
 import type { RuleResult } from '../types';
-import { getFileDependencies } from './getFileDependencies';
 import type { FileLocatorData } from './types';
 
 export function fileCheckBeFreeOfCycles(

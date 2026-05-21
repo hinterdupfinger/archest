@@ -26,8 +26,9 @@ export function locateClasses(
     });
   }
   if (options?.withDecorator) {
+    const decorator = options.withDecorator;
     filtered = filtered.filter((c) => {
-      return c.decorators.includes(options.withDecorator!);
+      return c.decorators.includes(decorator);
     });
   }
   if (options?.extending) {
@@ -36,8 +37,9 @@ export function locateClasses(
     });
   }
   if (options?.implementing) {
+    const implementing = options.implementing;
     filtered = filtered.filter((c) => {
-      return c.implements.includes(options.implementing!);
+      return c.implements.includes(implementing);
     });
   }
   if (options?.havingModifier) {

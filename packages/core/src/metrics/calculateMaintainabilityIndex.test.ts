@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { describe, expect, it } from 'vitest';
-import { createSourceFile, getFunctions } from '../testUtils';
+import { createSourceFile } from '../testUtils';
 import { calculateMaintainabilityIndex } from './calculateMaintainabilityIndex';
 
 function getTSFunctions(sourceFile: ts.SourceFile): ts.Node[] {

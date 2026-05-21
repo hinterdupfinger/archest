@@ -6,7 +6,6 @@ describe('locateFiles', () => {
   it('should filter files by inFolder query', () => {
     const file1 = createSourceFile('function a() {}', 'src/domain/file1.ts');
     const file2 = createSourceFile('function b() {}', 'src/infra/file2.ts');
-    // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
     const project = createMockProgram([file1, file2]);
     // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
     const result = locateFiles(project.files as any, project, undefined, {
@@ -22,7 +21,6 @@ describe('locateFiles', () => {
       'function b() {}',
       'src/domain/file2.spec.ts',
     );
-    // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
     const project = createMockProgram([file1, file2]);
     // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
     const result = locateFiles(project.files as any, project, undefined, {
