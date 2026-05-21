@@ -69,6 +69,7 @@ Use native Vitest `expect()` chains with the custom matchers provided by Archest
 
 ### Structural Matchers (Files & Folders)
 - `.toDependOnFilesInFolder(folderName)`: Asserts that files import from the specified folder.
+- `.toDependOnExternalModule(moduleName)`: Asserts that files import from the specified external module (e.g. from node_modules).
 - `.toResideInFolder(folderName)`: Asserts that classes physically reside in the given folder.
 - `.toMatchNamePattern(regexOrString)`: Asserts that a File, Class, or Function name matches a specific RegExp or string pattern.
 - `.toHaveNameMatchingFileName()`: Asserts that an exported Class or Function has a name matching its filename.

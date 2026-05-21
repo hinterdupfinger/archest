@@ -19,3 +19,11 @@ export {
 } from '@archest/core';
 // 2. Jest Integrations
 export { type ArchestMatchers, setupMatchers } from './matchers';
+
+import type { ArchestMatchers } from './matchers';
+
+declare global {
+  namespace jest {
+    interface Matchers<R> extends ArchestMatchers<R> {}
+  }
+}

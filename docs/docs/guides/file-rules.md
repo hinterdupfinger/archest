@@ -20,7 +20,7 @@ const indexFiles = project.getFiles({ matchNamePattern: /.*\/index\.ts$/ });
 
 ## Dependency Checks
 
-Assert that files do or do not depend on other specific packages using native matchers. Archest automatically resolves TypeScript aliases and paths via your `tsconfig.json`.
+Assert that files do or do not depend on other specific packages or external modules using native matchers. Archest automatically resolves TypeScript aliases and paths via your `tsconfig.json`.
 
 ```typescript
 import { parseProject } from '@archest/vitest';
@@ -35,6 +35,10 @@ expect(uiComponents).not.toDependOnFilesInFolder('database');
 // Ensure controllers depend on services
 const controllers = project.getFiles({ inFolder: 'controllers' });
 expect(controllers).toDependOnFilesInFolder('services');
+
+// Ensure files outside src/graphql/ do not import 'gql-tada'
+const nonGraphqlFiles = project.getFiles({ matchNamePattern: /^(?!.*\/graphql\/).*/ });
+expect(nonGraphqlFiles).not.toDependOnExternalModule('gql-tada');
 ```
 
 ## Cycle Detection
@@ -66,6 +70,7 @@ expect(coreFiles).toHaveMaxExportedFunctions(1);
 ## Available Matchers
 
 - `.toDependOnFilesInFolder(folder: string)`
+- `.toDependOnExternalModule(moduleName: string | RegExp)`
 - `.toBeFreeOfCycles()`
 - `.toMatchNamePattern(pattern: string | RegExp)`
 - `.toHaveMaxExportedFunctions(max: number)`
@@ -73,7 +78,7 @@ expect(coreFiles).toHaveMaxExportedFunctions(1);
 - `.toHaveMinMaintainabilityIndex(min: number)`
 
 :::warning[Gotcha: External Libraries]
-`toDependOnFilesInFolder` ignores external library imports (node_modules). It is strictly used for checking internal monorepo/project dependencies.
+`toDependOnFilesInFolder` ignores external library imports (node_modules). It is strictly used for checking internal monorepo/project dependencies. To assert dependencies on external packages, use `toDependOnExternalModule`.
 :::
 
 :::danger[Anti-Pattern: Massive Cycle Checks]

@@ -33,6 +33,16 @@ An array of raw module paths this file imports (e.g., './utils', 'react').
 
 ***
 
+### external\_dependencies?
+
+> `optional` **external\_dependencies?**: `string`[]
+
+Defined in: core/dist/dto.d.ts:25
+
+An array of external module imports (e.g., 'react', 'lodash').
+
+***
+
 ### functions
 
 > **functions**: [`FunctionData`](FunctionData.md)[]

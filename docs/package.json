@@ -13,11 +13,11 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "typedoc": "npm run typedoc:vitest && npm run typedoc:jest",
+    "typedoc": "pnpm run typedoc:vitest && pnpm run typedoc:jest",
     "typedoc:vitest": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/vitest/src/index.ts --tsconfig ../packages/vitest/tsconfig.json --out docs/api/vitest --name \"@archest/vitest\"",
     "typedoc:jest": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/jest/src/index.ts --tsconfig ../packages/jest/tsconfig.json --out docs/api/jest --name \"@archest/jest\"",
-    "prebuild": "npm run typedoc",
-    "prestart": "npm run typedoc"
+    "prebuild": "pnpm run typedoc",
+    "prestart": "pnpm run typedoc"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.1",

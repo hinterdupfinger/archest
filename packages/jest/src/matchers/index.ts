@@ -27,7 +27,6 @@ import {
   sliceCheckBeFreeOfCycles,
   sliceCheckHaveMaxDistanceFromMainSequence,
 } from '@archest/core';
-import type { ArchestMatchers } from './models';
 
 export * from './models';
 
@@ -340,10 +339,4 @@ export function setupMatchers() {
       };
     },
   });
-}
-
-declare global {
-  namespace jest {
-    interface Matchers<R> extends ArchestMatchers<R> {}
-  }
 }

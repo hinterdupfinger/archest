@@ -6,7 +6,7 @@
 
 # Interface: FunctionData
 
-Defined in: core/dist/dto.d.ts:52
+Defined in: core/dist/dto.d.ts:54
 
 Represents a function declaration or arrow function extracted from a file.
 
@@ -16,7 +16,7 @@ Represents a function declaration or arrow function extracted from a file.
 
 > `optional` **cyclomatic\_complexity?**: `number`
 
-Defined in: core/dist/dto.d.ts:64
+Defined in: core/dist/dto.d.ts:66
 
 The computed McCabe cyclomatic complexity of the function body.
 
@@ -26,7 +26,7 @@ The computed McCabe cyclomatic complexity of the function body.
 
 > **has\_explicit\_return\_type**: `boolean`
 
-Defined in: core/dist/dto.d.ts:62
+Defined in: core/dist/dto.d.ts:64
 
 True if the function explicitly declares a return type.
 
@@ -36,7 +36,7 @@ True if the function explicitly declares a return type.
 
 > **is\_async**: `boolean`
 
-Defined in: core/dist/dto.d.ts:58
+Defined in: core/dist/dto.d.ts:60
 
 True if the function is marked as async.
 
@@ -46,7 +46,7 @@ True if the function is marked as async.
 
 > **is\_exported**: `boolean`
 
-Defined in: core/dist/dto.d.ts:56
+Defined in: core/dist/dto.d.ts:58
 
 True if the function is exported from the file.
 
@@ -56,7 +56,7 @@ True if the function is exported from the file.
 
 > **is\_top\_level**: `boolean`
 
-Defined in: core/dist/dto.d.ts:60
+Defined in: core/dist/dto.d.ts:62
 
 True if the function is defined at the root level of the file context.
 
@@ -66,7 +66,7 @@ True if the function is defined at the root level of the file context.
 
 > `optional` **maintainability\_index?**: `number`
 
-Defined in: core/dist/dto.d.ts:66
+Defined in: core/dist/dto.d.ts:68
 
 The computed Halstead maintainability index (0-100).
 
@@ -76,6 +76,6 @@ The computed Halstead maintainability index (0-100).
 
 > **name**: `string` \| `null`
 
-Defined in: core/dist/dto.d.ts:54
+Defined in: core/dist/dto.d.ts:56
 
 The name of the function, or null if anonymous.

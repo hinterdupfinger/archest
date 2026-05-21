@@ -27,7 +27,6 @@ import {
   sliceCheckHaveMaxDistanceFromMainSequence,
 } from '@archest/core';
 import { expect } from 'vitest';
-import type { ArchestMatchers } from './models';
 
 export * from './models';
 
@@ -336,9 +335,4 @@ export function setupMatchers() {
       };
     },
   });
-}
-
-declare module 'vitest' {
-  // biome-ignore lint/suspicious/noExplicitAny: Matcher signature
-  interface Assertion<T = any> extends ArchestMatchers<T> {}
 }
