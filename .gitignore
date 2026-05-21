@@ -24,4 +24,20 @@ dist/
 # typescript
 *.tsbuildinfo
 
-.DS_Store
+# rust
+target/
+*.node
+packages/core-rust/index.js
+packages/core-rust/index.d.ts
+
+# turborepo
+.turbo/
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Packaging
+*.tgz

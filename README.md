@@ -9,7 +9,7 @@ Archest is an architecture testing tool for TypeScript, heavily inspired by Arch
 
 ## Features
 
-- ⚡️ **Zero Dependencies**: Parses your TypeScript AST natively using the exact same TypeScript compiler your project already uses. No heavy external Java dependencies.
+- ⚡️ **Native Performance**: Parses your AST and builds dependency graphs natively using a blazing-fast Rust backend (`@archest/core-rust`) powered by `tree-sitter`. No heavy external Java dependencies.
 - 🧪 **Native Vitest Matchers**: Seamlessly hooks into Vitest. Get instant feedback on your architecture in your existing CI/CD pipelines right next to your unit tests.
 - 🔄 **Cycle Detection**: Automatically traverses your dependency graph to prevent circular imports and spaghetti code at both the file and macro-domain level.
 - 🧱 **Layered Architecture**: Strictly enforce N-Tier architectures (e.g., UI -> Services -> Data Access) with a fluent API.
@@ -37,7 +37,11 @@ import { describe, it, expect } from 'vitest';
 setupMatchers();
 
 describe('Architecture Rules', () => {
-  const project = parseProject();
+  // Automatically loads tsconfig.json. You can optionally pass `include` and `exclude` 
+  // arrays to explicitly filter which files are parsed by the Rust AST engine.
+  const project = parseProject({
+    exclude: ['**/*.test.ts']
+  });
 
   it('UI components must not access database logic directly', () => {
     const uiComponents = project.getFiles({ inFolder: 'components/ui' });

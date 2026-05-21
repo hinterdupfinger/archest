@@ -3,16 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "repository": "https://github.com/hinterdupfinger/archest",
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",
-    "build": "pnpm --filter @archest/vitest build",
-    "test": "pnpm --filter @archest/vitest test && pnpm --filter basic-usage test",
+    "build": "turbo run build",
+    "test": "turbo run test",
     "docs:build": "pnpm --filter docs build",
     "docs:start": "pnpm --filter docs start"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.14"
+    "@biomejs/biome": "2.4.14",
+    "turbo": "^2.9.14",
+    "typedoc-plugin-markdown": "^4.11.0"
   }
 }
