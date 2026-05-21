@@ -1,7 +1,5 @@
-import { expect } from 'vitest';
 import {
-  type LocatorData,
-  type RuleResult,
+  checkDependOnExternalModule,
   checkDependOnFilesInFolder,
   checkLayeredArchitecture,
   classCheckExtendClass,
@@ -22,10 +20,13 @@ import {
   functionCheckHaveModifier,
   functionCheckHaveNameMatchingFileName,
   functionCheckMatchNamePattern,
+  type LocatorData,
   propertyCheckBeReadonly,
+  type RuleResult,
   sliceCheckBeFreeOfCycles,
   sliceCheckHaveMaxDistanceFromMainSequence,
 } from '@archest/core';
+import { expect } from 'vitest';
 import type { ArchestMatchers } from './models';
 
 export * from './models';
@@ -166,6 +167,24 @@ export function setupMatchers() {
       } else {
         throw new Error(
           `toDependOnFilesInFolder matcher does not support ${received.type}`,
+        );
+      }
+      return {
+        pass: this.isNot ? !result.pass : result.pass,
+        message: result.message,
+      };
+    },
+
+    toDependOnExternalModule(
+      received: LocatorData,
+      moduleName: string | RegExp,
+    ) {
+      let result: RuleResult;
+      if (received.type === 'FileLocator') {
+        result = checkDependOnExternalModule(received, moduleName, this.isNot);
+      } else {
+        throw new Error(
+          `toDependOnExternalModule matcher does not support ${received.type}`,
         );
       }
       return {

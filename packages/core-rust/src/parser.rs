@@ -17,6 +17,7 @@ pub struct FileData {
   pub functions: Vec<FunctionData>,
   pub properties: Vec<PropertyData>,
   pub dependencies: Vec<String>,
+  pub external_dependencies: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -318,6 +319,9 @@ fn traverse_node(node: Node, source: &str, file_data: &mut FileData) {
            resolved.push_str(".ts");
         }
         file_data.dependencies.push(resolved);
+      } else {
+        // External dependencies like 'vue', 'gql-tada', etc.
+        file_data.external_dependencies.push(path);
       }
     }
   }

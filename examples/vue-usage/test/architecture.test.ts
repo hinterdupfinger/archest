@@ -7,6 +7,13 @@ describe('Vue Architecture Rules', () => {
   const project = parseProject();
 
   describe('Composables', () => {
+    it('should only use gql-tada inside the graphql folder', () => {
+      const nonGraphqlFiles = project.getFiles({
+        matchNamePattern: /^(?!.*\/graphql\/).*$/,
+      });
+      expect(nonGraphqlFiles).not.toDependOnExternalModule('gql-tada');
+    });
+
     it('composables should be exported functions starting with use', () => {
       const useFunctions = project.getFunctions({
         inFolder: 'composables',
@@ -35,7 +42,7 @@ describe('Vue Architecture Rules', () => {
         matchNamePattern: /.*\.ts$/,
       }).files;
       const filesImportingGraphql = allFiles.filter((file) => {
-        return file.dependencies.some(dep => dep.includes('graphql/setup'));
+        return file.dependencies.some((dep) => dep.includes('graphql/setup'));
       });
 
       // Use our new matcher to ensure they follow the strict naming convention!

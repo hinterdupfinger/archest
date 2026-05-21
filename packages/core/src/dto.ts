@@ -22,6 +22,8 @@ export interface FileData {
   properties: PropertyData[];
   /** An array of raw module paths this file imports (e.g., './utils', 'react'). */
   dependencies?: string[];
+  /** An array of external module imports (e.g., 'react', 'lodash'). */
+  external_dependencies?: string[];
 }
 
 /**

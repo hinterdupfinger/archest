@@ -45,7 +45,13 @@ export interface ArchestMatchers<R = unknown> {
    * ```
    */
   toHaveModifier(
-    modifier: 'export' | 'default' | 'abstract' | 'async' | 'private' | 'public',
+    modifier:
+      | 'export'
+      | 'default'
+      | 'abstract'
+      | 'async'
+      | 'private'
+      | 'public',
   ): void;
 
   /**
@@ -110,6 +116,22 @@ export interface ArchestMatchers<R = unknown> {
    * ```
    */
   toDependOnFilesInFolder(folder: string): void;
+
+  /**
+   * Asserts that a file locator depends on a specific external module (e.g. from node_modules).
+   * Supports FileLocators.
+   *
+   * @param moduleName - The exact string name or RegExp of the external package (e.g. 'vue', 'lodash').
+   * @example
+   * ```typescript
+   * it('should only use gql-tada inside the graphql module', () => {
+   *   expect(
+   *     project.files().not.matching(/src\/graphql\//)
+   *   ).not.toDependOnExternalModule('gql-tada');
+   * });
+   * ```
+   */
+  toDependOnExternalModule(moduleName: string | RegExp): void;
 
   /**
    * Analyzes the AST dependency graph and asserts that the queried elements are entirely free of circular dependencies.

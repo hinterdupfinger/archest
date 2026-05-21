@@ -2,7 +2,9 @@ import { join } from 'node:path';
 import { parseProject } from '@archest/core';
 
 describe('Advanced Architecture Tests', () => {
-  const project = parseProject({ tsConfigFilePath: join(__dirname, '../tsconfig.json') });
+  const project = parseProject({
+    tsConfigFilePath: join(__dirname, '../tsconfig.json'),
+  });
 
   describe('Functions', () => {
     it('top-level functions in services should be exported', () => {

@@ -1,15 +1,20 @@
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseProject } from '../src/index';
 import { setupMatchers } from '../src/matchers';
-
-import { join } from 'node:path';
 
 setupMatchers();
 
 describe('@archest/vitest', () => {
   const project = parseProject({
     tsConfigFilePath: join(__dirname, '../../core/tsconfig.json'),
-    exclude: ['**/*.test.ts', 'src/testUtils.ts', 'src/types.ts', 'src/dto.ts', 'src/index.ts']
+    exclude: [
+      '**/*.test.ts',
+      'src/testUtils.ts',
+      'src/types.ts',
+      'src/dto.ts',
+      'src/index.ts',
+    ],
   });
 
   describe('FileLocator (Dependency Checks)', () => {
@@ -80,9 +85,7 @@ describe('@archest/vitest', () => {
 
       // Domains should only be accessed by Root
       expect(
-        architecture
-          .whereLayer('Domains')
-          .shouldOnlyBeAccessedBy('Root'),
+        architecture.whereLayer('Domains').shouldOnlyBeAccessedBy('Root'),
       ).toPass();
     });
   });

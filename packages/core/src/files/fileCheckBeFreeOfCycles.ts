@@ -7,7 +7,7 @@ export function fileCheckBeFreeOfCycles(
   isNot: boolean,
 ): RuleResult {
   const targetFiles = locator.files.map((f) => f.path);
-  
+
   const archestProject = locator.archestProject;
   if (!archestProject) {
     // Fallback for mocked tests or if registry is missing

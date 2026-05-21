@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
-import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   build: {
@@ -10,7 +10,15 @@ export default defineConfig({
       fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`,
     },
     rollupOptions: {
-      external: ['typescript', 'vitest', 'path', 'fs', 'node:path', 'node:fs', '@archest/core'],
+      external: [
+        'typescript',
+        'vitest',
+        'path',
+        'fs',
+        'node:path',
+        'node:fs',
+        '@archest/core',
+      ],
     },
     sourcemap: true,
   },

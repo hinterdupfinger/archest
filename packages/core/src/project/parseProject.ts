@@ -21,7 +21,7 @@ import { locateSlices } from '../slices/locateSlices';
  * Options to configure how the project is parsed and analyzed.
  */
 export interface ParseProjectOptions {
-  /** 
+  /**
    * An optional absolute path to a specific tsconfig.json file.
    * If omitted, Archest will attempt to find the nearest tsconfig.json in the current working directory.
    */
@@ -42,12 +42,12 @@ export interface ParseProjectOptions {
  * @example
  * ```typescript
  * import { parseProject } from '@archest/vitest';
- * 
+ *
  * const project = parseProject({
  *   include: ['src/domain/**\/*.ts'],
  *   exclude: ['**\/*.test.ts']
  * });
- * 
+ *
  * const domainFiles = project.getFiles();
  * ```
  */
@@ -61,7 +61,7 @@ export function parseProject(options: ParseProjectOptions = {}) {
   }
 
   const projectDir = dirname(configPath);
-  
+
   const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
   if (options.include) configFile.config.include = options.include;
   if (options.exclude) configFile.config.exclude = options.exclude;
@@ -93,7 +93,12 @@ export function parseProject(options: ParseProjectOptions = {}) {
   return {
     projectData,
     getFiles: (queryOptions?: FileQueryOptions) => {
-      return locateFiles(projectData.files, projectData, archestProject, queryOptions);
+      return locateFiles(
+        projectData.files,
+        projectData,
+        archestProject,
+        queryOptions,
+      );
     },
 
     getClasses: (queryOptions?: ClassQueryOptions) => {

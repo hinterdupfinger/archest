@@ -1,5 +1,5 @@
-import * as ts from 'typescript';
 import { ArchestProject } from '@archest/core-rust';
+import * as ts from 'typescript';
 
 import type {
   ClassData,
@@ -27,7 +27,9 @@ export function createMockProgram(sourceFiles: ts.SourceFile[]): ProjectData {
   };
 }
 
-export function createMockArchestProject(projectData: ProjectData): ArchestProject {
+export function createMockArchestProject(
+  projectData: ProjectData,
+): ArchestProject {
   return ArchestProject.parseMock(JSON.stringify(projectData));
 }
 

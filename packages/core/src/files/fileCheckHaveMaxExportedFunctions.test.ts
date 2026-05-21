@@ -20,7 +20,12 @@ describe('fileCheckHaveMaxExportedFunctions', () => {
     const data: FileLocatorData = {
       type: 'FileLocator',
       // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
-      files: [{ path: 'test.ts', functions: [{ is_exported: true }, { is_exported: true }] } as any],
+      files: [
+        {
+          path: 'test.ts',
+          functions: [{ is_exported: true }, { is_exported: true }],
+        } as any,
+      ],
       // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
       projectData: {} as any,
     };

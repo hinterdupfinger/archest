@@ -1,7 +1,6 @@
 /// <reference types="jest" />
 import {
-  type LocatorData,
-  type RuleResult,
+  checkDependOnExternalModule,
   checkDependOnFilesInFolder,
   checkLayeredArchitecture,
   classCheckExtendClass,
@@ -22,7 +21,9 @@ import {
   functionCheckHaveModifier,
   functionCheckHaveNameMatchingFileName,
   functionCheckMatchNamePattern,
+  type LocatorData,
   propertyCheckBeReadonly,
+  type RuleResult,
   sliceCheckBeFreeOfCycles,
   sliceCheckHaveMaxDistanceFromMainSequence,
 } from '@archest/core';
@@ -58,7 +59,7 @@ export function setupMatchers() {
 
       const { pass, message } = result;
       return {
-        pass: !!this.isNot ? !pass : pass,
+        pass: this.isNot ? !pass : pass,
         message: pass ? () => 'Expected rule not to pass' : () => message(),
       };
     },
@@ -73,7 +74,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -90,7 +91,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -105,7 +106,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -124,7 +125,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -139,7 +140,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -154,7 +155,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -169,7 +170,29 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
+        message: result.message,
+      };
+    },
+
+    toDependOnExternalModule(
+      received: LocatorData,
+      moduleName: string | RegExp,
+    ) {
+      let result: RuleResult;
+      if (received.type === 'FileLocator') {
+        result = checkDependOnExternalModule(
+          received,
+          moduleName,
+          !!this.isNot,
+        );
+      } else {
+        throw new Error(
+          `toDependOnExternalModule matcher does not support ${received.type}`,
+        );
+      }
+      return {
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -186,7 +209,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -205,7 +228,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -236,7 +259,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -261,7 +284,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -280,7 +303,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -297,7 +320,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
@@ -312,7 +335,7 @@ export function setupMatchers() {
         );
       }
       return {
-        pass: !!this.isNot ? !result.pass : result.pass,
+        pass: this.isNot ? !result.pass : result.pass,
         message: result.message,
       };
     },
