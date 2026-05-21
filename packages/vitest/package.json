@@ -1,0 +1,55 @@
+{
+  "name": "@archest/vitest",
+  "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hinterdupfinger/archest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hinterdupfinger/archest/issues"
+  },
+  "description": "An architecture unit test framework for Typescript and Vitest",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "vitest",
+    "architecture",
+    "testing",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "vite": "^8.0.10",
+    "vite-plugin-dts": "^5.0.0",
+    "vitest": "^4.1.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.x || ^6.x"
+  },
+  "dependencies": {
+    "@archest/core": "workspace:*",
+    "@archest/core-rust": "workspace:*"
+  },
+  "bundledDependencies": [
+    "@archest/core",
+    "@archest/core-rust"
+  ]
+}

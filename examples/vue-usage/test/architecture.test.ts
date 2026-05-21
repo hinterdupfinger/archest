@@ -14,7 +14,7 @@ describe('Vue Architecture Rules', () => {
       });
       expect(useFunctions).toHaveModifier('export');
 
-      const fileNames = useFunctions.functions.map((f) => f.name?.getText());
+      const fileNames = useFunctions.functions.map((f) => f.name);
       fileNames.forEach((name) => {
         if (name) expect(name).toMatch(/^use/);
       });
@@ -35,8 +35,7 @@ describe('Vue Architecture Rules', () => {
         matchNamePattern: /.*\.ts$/,
       }).files;
       const filesImportingGraphql = allFiles.filter((file) => {
-        const text = file.getText();
-        return text.includes('graphql/setup');
+        return file.dependencies.some(dep => dep.includes('graphql/setup'));
       });
 
       // Use our new matcher to ensure they follow the strict naming convention!
@@ -44,8 +43,8 @@ describe('Vue Architecture Rules', () => {
       const locator = {
         type: 'FileLocator' as const,
         files: filesImportingGraphql,
-        // biome-ignore lint/suspicious/noExplicitAny: Accessing private for tests
-        program: (project as any).program,
+        projectData: (project as any).projectData,
+        archestProject: (project as any).archestProject,
       };
 
       expect(locator).toMatchNamePattern(/(\.graphql\.ts$|setup\.ts$)/);

@@ -15,7 +15,7 @@ A common question is: *"Why do I need architecture tests if I already use a fast
 While modern linters are incredible for catching micro-level syntax errors and formatting issues, they are fundamentally designed for **single-file analysis**. To maintain their blazing-fast speeds, they do not resolve cross-file dependencies or build project-wide module graphs. Furthermore, being written in Rust, tools like Biome and Oxc currently do not support custom plugins written in JavaScript/TypeScript.
 
 Architecture tests solve a completely different problem:
-- **Project-Wide Scope**: Archest uses the TypeScript compiler API to resolve the entire dependency graph, allowing it to easily detect circular imports between deep slices or ensure that a `Service` layer never imports a `Controller`.
+- **Project-Wide Scope**: Archest uses its native Rust backend to resolve the entire dependency graph, allowing it to easily detect circular imports between deep slices or ensure that a `Service` layer never imports a `Controller`.
 - **Custom Extensibility**: You can write highly specific, custom architectural constraints for your exact business domain directly in TypeScript, right next to your unit tests.
 
 Use linters for micro-level code quality. Use Archest for macro-level codebase boundaries.
@@ -34,7 +34,7 @@ Without guardrails, an AI agent might:
 To further enhance the experience for AI agents, we provide an [Official Agent Skill](./agent-skills.md) that gives the agent the explicit context and API documentation needed to write flawless architecture tests using `vitest-arch`.
 
 ## Key Features
-- **Zero Heavy Dependencies**: Parses the AST directly using the native TypeScript compiler API.
+- **Native Performance**: Parses the AST directly using a blazing-fast native Rust backend (`@archest/core-rust`) powered by `tree-sitter`.
 - **Native Vitest Matchers**: Seamlessly integrates into your Vitest test suites with custom `expect` matchers.
 - **Dependency Checks**: Ensure layers (e.g. Services, Controllers) only talk to the correct packages.
 - **Cycle Detection**: Automatically catch circular imports before they become massive architectural tangles.

@@ -1,0 +1,62 @@
+[**@archest/jest**](../README.md)
+
+***
+
+[@archest/jest](../README.md) / FileData
+
+# Interface: FileData
+
+Defined in: core/dist/dto.d.ts:13
+
+Represents a single source file in the project.
+Contains information about its path, dependencies, and all nested code blocks.
+
+## Properties
+
+### classes
+
+> **classes**: [`ClassData`](ClassData.md)[]
+
+Defined in: core/dist/dto.d.ts:17
+
+An array of all classes defined within this file.
+
+***
+
+### dependencies?
+
+> `optional` **dependencies?**: `string`[]
+
+Defined in: core/dist/dto.d.ts:23
+
+An array of raw module paths this file imports (e.g., './utils', 'react').
+
+***
+
+### functions
+
+> **functions**: [`FunctionData`](FunctionData.md)[]
+
+Defined in: core/dist/dto.d.ts:19
+
+An array of all top-level or exported functions defined within this file.
+
+***
+
+### path
+
+> **path**: `string`
+
+Defined in: core/dist/dto.d.ts:15
+
+The absolute path to the file.
+
+***
+
+### properties
+
+> **properties**: [`PropertyData`](PropertyData.md)[]
+
+Defined in: core/dist/dto.d.ts:21
+
+An array of properties extracted from classes or objects in the file.

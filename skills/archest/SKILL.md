@@ -19,7 +19,11 @@ import { parseProject, setupMatchers } from '@archest/vitest';
 setupMatchers();
 
 describe('Architecture Rules', () => {
-  const project = parseProject();
+  // You can optionally pass `include` and `exclude` arrays to explicitly
+  // filter which files are parsed, overriding tsconfig.json globs.
+  const project = parseProject({
+    exclude: ['**/*.test.ts']
+  });
   // ...
 });
 ```

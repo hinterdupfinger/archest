@@ -1,6 +1,6 @@
 # Agent Instructions (AGENTS.md)
 
-Welcome! If you are an AI agent working on the `archest` (formerly `vitest-arch`) repository, you must adhere strictly to the guidelines and workflows outlined below. This project is a specialized architectural testing framework that heavily interacts with the TypeScript Compiler API.
+Welcome! If you are an AI agent working on the `archest` (formerly `vitest-arch`) repository, you must adhere strictly to the guidelines and workflows outlined below. This project is a specialized architectural testing framework that relies on a high-performance native Rust backend (`@archest/core-rust`) for AST parsing and cycle detection.
 
 ## Mandatory Agent Workflow
 
@@ -38,13 +38,14 @@ Before concluding any task or reporting success to the user, you **MUST** ensure
   const program = {} as any;
   ```
 
-## 3. TypeScript Compiler API Gotchas
+## 3. Rust Backend & NAPI Bindings
 
-Working with the TS Compiler API in this repository requires special attention to AST binding:
+The framework delegates all heavy lifting (AST parsing, graph traversal, cycle detection) to a blazing-fast native Rust crate (`packages/core-rust`).
 
-* **Parent Pointers**: If you create a `ts.Program`, you **MUST** call `program.getTypeChecker()` immediately after. This forces the TypeScript compiler to bind the AST, which populates the `.parent` pointers on nodes. Without this, calling `node.getSourceFile()` will silently return `undefined` and crash the locators.
-* **Synthetic Nodes**: When writing unit tests and generating synthetic AST nodes, always pass `true` as the `setParentNodes` argument to `ts.createSourceFile`.
-* **Vue/Svelte Support**: We extract the contents of `<script>` blocks from `.vue` and `.svelte` files and parse them using `ts.createSourceFile` as `ScriptKind.TS`.
+* **NAPI Bindings**: The Rust code is compiled to native binaries using `napi-rs`. When modifying the Rust backend, you must run `pnpm build` in the `core-rust` directory to regenerate the index files.
+* **Native State Isolation**: The `ArchestProject` instance is passed down via locators. Because Vitest deep-clones values passed to `expect()`, the native `archestProject` property is made non-enumerable to prevent Vitest from stripping its C++ pointers during test assertion logging.
+* **Vue/Svelte Support**: We extract the contents of `<script>` blocks from `.vue` and `.svelte` files and parse them using `tree-sitter` in the Rust engine.
+* **Testing Native Integrations**: When writing unit tests in TypeScript that require mock AST data, use the `createMockArchestProject` factory method from `testUtils.ts` to seamlessly bridge plain JSON mock definitions into a native `ArchestProject` instance.
 
 ## 4. Testing Strategy
 
