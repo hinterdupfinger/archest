@@ -5,6 +5,8 @@
 export interface ProjectData {
   /** A list of all files that were successfully parsed in the project workspace. */
   files: FileData[];
+  /** The root directory of the parsed project. */
+  projectRoot?: string;
 }
 
 /**
@@ -24,6 +26,10 @@ export interface FileData {
   dependencies?: string[];
   /** An array of external module imports (e.g., 'react', 'lodash'). */
   external_dependencies?: string[];
+  /** An array of type-only module paths this file imports. */
+  type_dependencies?: string[];
+  /** An array of external type-only module imports. */
+  external_type_dependencies?: string[];
 }
 
 /**

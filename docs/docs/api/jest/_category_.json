@@ -1,0 +1,8 @@
+{
+  "label": "@archest/jest",
+  "position": 2,
+  "link": {
+    "type": "doc",
+    "id": "api/jest/README"
+  }
+}

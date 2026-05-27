@@ -45,6 +45,15 @@ importers:
         specifier: ^19.0.0
         version: 19.2.5(react@19.2.5)
     devDependencies:
+      '@archest/core':
+        specifier: workspace:*
+        version: link:../packages/core
+      '@archest/jest':
+        specifier: workspace:*
+        version: link:../packages/jest
+      '@archest/vitest':
+        specifier: workspace:*
+        version: link:../packages/vitest
       '@docusaurus/module-type-aliases':
         specifier: 3.10.1
         version: 3.10.1(@swc/core@1.15.32)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)

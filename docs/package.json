@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
+    "start": "pnpm run download-fonts && pnpm run typedoc && docusaurus start",
+    "build": "pnpm run download-fonts && pnpm run typedoc && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -14,10 +14,9 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "typedoc": "pnpm run typedoc:vitest && pnpm run typedoc:jest",
-    "typedoc:vitest": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/vitest/src/index.ts --tsconfig ../packages/vitest/tsconfig.json --out docs/api/vitest --name \"@archest/vitest\"",
-    "typedoc:jest": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/jest/src/index.ts --tsconfig ../packages/jest/tsconfig.json --out docs/api/jest --name \"@archest/jest\"",
-    "prebuild": "pnpm run typedoc",
-    "prestart": "pnpm run typedoc"
+    "typedoc:vitest": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/vitest/src/index.ts --tsconfig ../packages/vitest/tsconfig.json --out docs/api/vitest --name \"@archest/vitest\" --cleanOutputDir false",
+    "typedoc:jest": "typedoc --plugin typedoc-plugin-markdown --entryPoints ../packages/jest/src/index.ts --tsconfig ../packages/jest/tsconfig.json --out docs/api/jest --name \"@archest/jest\" --cleanOutputDir false",
+    "download-fonts": "node scripts/download-fonts.js"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.1",
@@ -30,6 +29,9 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@archest/core": "workspace:*",
+    "@archest/jest": "workspace:*",
+    "@archest/vitest": "workspace:*",
     "@docusaurus/module-type-aliases": "3.10.1",
     "@docusaurus/tsconfig": "3.10.1",
     "@docusaurus/types": "3.10.1",

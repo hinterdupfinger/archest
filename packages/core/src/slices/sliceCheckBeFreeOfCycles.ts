@@ -5,6 +5,13 @@ export function sliceCheckBeFreeOfCycles(
   locator: SliceLocatorData,
   isNot: boolean,
 ): RuleResult {
+  if (locator.sliceIds.size === 0) {
+    return {
+      pass: false,
+      message: () => 'No slices matched the selector. The rule is vacuous.',
+    };
+  }
+
   const graph: Map<string, Set<string>> = new Map();
   for (const slice of locator.sliceIds) {
     graph.set(slice, new Set());

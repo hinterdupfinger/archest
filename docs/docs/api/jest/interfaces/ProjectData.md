@@ -20,3 +20,13 @@ This is the root node returned by the native Rust parser.
 Defined in: core/dist/dto.d.ts:7
 
 A list of all files that were successfully parsed in the project workspace.
+
+***
+
+### projectRoot?
+
+> `optional` **projectRoot?**: `string`
+
+Defined in: core/dist/dto.d.ts:9
+
+The root directory of the parsed project.

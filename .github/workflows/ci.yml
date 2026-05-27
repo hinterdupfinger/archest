@@ -45,12 +45,30 @@ jobs:
       - name: Build native module
         run: pnpm --filter @archest/core-rust build
 
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build JVM dynamic library
+        run: cargo build --release -p archest-jvm
+        working-directory: packages/core-rust
+
+      - name: Build UniFFI bindgen (Linux only)
+        if: runner.os == 'Linux'
+        run: cargo build --release -p archest-jvm --bin uniffi-bindgen
+        working-directory: packages/core-rust
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: native-bindings-${{ runner.os }}
-          path: packages/core-rust/*.node
-          if-no-files-found: error
+          path: |
+            packages/core-rust/*.node
+            packages/core-rust/target/release/libarchest_jvm.*
+            packages/core-rust/target/release/archest_jvm.*
+            packages/core-rust/target/release/deps/libarchest_jvm.*
+            packages/core-rust/target/release/deps/archest_jvm.*
+            packages/core-rust/target/release/uniffi-bindgen
+          if-no-files-found: warn
 
   test:
     name: Run Tests
@@ -82,9 +100,39 @@ jobs:
       - name: Run all tests
         run: pnpm test
 
+  test-jvm:
+    name: Run JVM Tests
+    needs: build-native
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'oracle'
+          java-version: '26'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Download Linux native bindings
+        uses: actions/download-artifact@v4
+        with:
+          name: native-bindings-Linux
+          path: packages/core-rust
+
+      - name: Make bindgen executable
+        run: chmod +x packages/core-rust/target/release/uniffi-bindgen
+
+      - name: Run JVM tests
+        run: ./gradlew test
+        working-directory: jvm
+
   publish-npm:
     name: Publish to NPM
-    needs: [test, build-native]
+    needs: [test, build-native, test-jvm]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
@@ -109,9 +157,9 @@ jobs:
       - name: Download all native bindings
         uses: actions/download-artifact@v4
         with:
-          path: packages/core-rust
           pattern: native-bindings-*
           merge-multiple: true
+          path: packages/core-rust
 
       - name: Build package
         run: pnpm build
@@ -120,6 +168,44 @@ jobs:
         run: |
           pnpm --filter @archest/vitest publish --access public --no-git-checks --provenance
           pnpm --filter @archest/jest publish --access public --no-git-checks --provenance
+
+  publish-jvm:
+    name: Publish JVM Packages to GitHub Packages
+    needs: [test-jvm, build-native]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'oracle'
+          java-version: '26'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Download all native bindings
+        uses: actions/download-artifact@v4
+        with:
+          pattern: native-bindings-*
+          merge-multiple: true
+          path: packages/core-rust
+
+      - name: Make bindgen executable
+        run: chmod +x packages/core-rust/target/release/uniffi-bindgen
+
+      - name: Publish JVM packages to GitHub Packages
+        run: ./gradlew publish
+        working-directory: jvm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
 
   build-docs:
     name: Build Docusaurus
@@ -145,6 +231,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Build core package
+        run: pnpm --filter @archest/core build
 
       - name: Build docs
         run: pnpm --filter docs build

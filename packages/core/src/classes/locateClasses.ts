@@ -1,4 +1,5 @@
 import type { ClassData, ProjectData } from '../dto';
+import { getCommonPrefix, isFileInFolder } from '../utils/paths';
 import type { ClassLocatorData, ClassQueryOptions } from './types';
 
 export function locateClasses(
@@ -9,12 +10,12 @@ export function locateClasses(
   let filtered = classes;
 
   if (options?.inFolder) {
-    filtered = filtered.filter((c) => {
-      return (
-        c._filePath.includes(`/${options.inFolder}/`) ||
-        c._filePath.includes(`\\${options.inFolder}\\`)
-      );
-    });
+    const filePaths = classes.map((c) => c._filePath);
+    const projectRoot = projectData.projectRoot || getCommonPrefix(filePaths);
+    filtered = filtered.filter((c) =>
+      // biome-ignore lint/style/noNonNullAssertion: options.inFolder is checked in the outer if block
+      isFileInFolder(c._filePath, projectRoot, options.inFolder!),
+    );
   }
   if (options?.matchNamePattern) {
     const regex =

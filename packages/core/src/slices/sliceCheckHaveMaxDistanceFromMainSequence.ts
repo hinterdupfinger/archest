@@ -6,6 +6,13 @@ export function sliceCheckHaveMaxDistanceFromMainSequence(
   max: number,
   isNot: boolean,
 ): RuleResult {
+  if (locator.sliceIds.size === 0) {
+    return {
+      pass: false,
+      message: () => 'No slices matched the selector. The rule is vacuous.',
+    };
+  }
+
   const violations: string[] = [];
 
   const ceMap = new Map<string, Set<string>>(); // Slices this slice depends on
