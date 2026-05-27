@@ -1,13 +1,8 @@
 #![deny(clippy::all)]
 
 use napi_derive::napi;
-
-pub mod parser;
-pub mod scanner;
-pub mod rules;
-
-use parser::ProjectData;
-use rules::RuleResult;
+use archest_core::parser::{self, ProjectData};
+use archest_core::rules::{self, RuleResult};
 
 #[napi(object)]
 pub struct NapiRuleResult {

@@ -1,0 +1,36 @@
+<!-- Add to <repositories> block in pom.xml -->
+<repositories>
+    <repository>
+        <id>github-packages</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/hinterdupfinger/archest</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+
+<!-- Add to <dependencies> block in pom.xml -->
+<dependencies>
+    <!-- For JUnit 6 (Jupiter) Integration -->
+    <dependency>
+        <groupId>org.archest</groupId>
+        <artifactId>archest-junit6</artifactId>
+        <version>0.1.0</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
+<!-- In your global settings.xml or project context, authenticate with GITHUB_ACTOR and GITHUB_TOKEN -->
+<!--
+<servers>
+    <server>
+        <id>github-packages</id>
+        <username>YOUR_GITHUB_USERNAME</username>
+        <password>YOUR_GITHUB_TOKEN</password>
+    </server>
+</servers>
+-->

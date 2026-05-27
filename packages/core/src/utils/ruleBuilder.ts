@@ -9,6 +9,13 @@ export function ruleBuilder<T>(
     failNotMessage: string;
   },
 ): RuleResult {
+  if (items.length === 0) {
+    return {
+      pass: false,
+      message: () => 'No items matched the selector. The rule is vacuous.',
+    };
+  }
+
   const violations: string[] = [];
 
   for (const item of items) {

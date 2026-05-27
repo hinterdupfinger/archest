@@ -12,7 +12,7 @@ describe('parseProject', () => {
     expect(project).toHaveProperty('getSlices');
 
     // Verify it can get its own files
-    const coreFiles = project.getFiles({ inFolder: 'core' });
+    const coreFiles = project.getFiles({ inFolder: 'src' });
     expect(coreFiles.files.length).toBeGreaterThan(0);
     expect(coreFiles.type).toBe('FileLocator');
   });

@@ -1,4 +1,5 @@
 import type { FunctionData, ProjectData } from '../dto';
+import { getCommonPrefix, isFileInFolder } from '../utils/paths';
 import type { FunctionLocatorData, FunctionQueryOptions } from './types';
 
 export function locateFunctions(
@@ -9,12 +10,12 @@ export function locateFunctions(
   let filtered = functions;
 
   if (options?.inFolder) {
-    filtered = filtered.filter((f) => {
-      return (
-        f._filePath.includes(`/${options.inFolder}/`) ||
-        f._filePath.includes(`\\${options.inFolder}\\`)
-      );
-    });
+    const filePaths = functions.map((f) => f._filePath);
+    const projectRoot = projectData.projectRoot || getCommonPrefix(filePaths);
+    filtered = filtered.filter((f) =>
+      // biome-ignore lint/style/noNonNullAssertion: options.inFolder is checked in the outer if block
+      isFileInFolder(f._filePath, projectRoot, options.inFolder!),
+    );
   }
 
   if (options?.matchNamePattern) {

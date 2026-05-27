@@ -1,6 +1,6 @@
 {
   "name": "@archest/vitest",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/hinterdupfinger/archest.git"

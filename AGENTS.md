@@ -1,59 +1,22 @@
 # Agent Instructions (AGENTS.md)
 
-Welcome! If you are an AI agent working on the `archest` (formerly `vitest-arch`) repository, you must adhere strictly to the guidelines and workflows outlined below. This project is a specialized architectural testing framework that relies on a high-performance native Rust backend (`@archest/core-rust`) for AST parsing and cycle detection.
+Welcome! If you are an AI agent working on the `archest` repository, you must adhere strictly to the guidelines and workflows documented below.
 
-## Mandatory Agent Workflow
+This repository is a specialized architectural testing framework that relies on a high-performance native Rust backend (`@archest/core-rust`) for AST parsing and cycle detection, supporting both JavaScript/TypeScript environments (via Jest/Vitest) and JVM environments (via JUnit 6 and Kotest).
 
-Before concluding any task or reporting success to the user, you **MUST** ensure both code quality and test integrity by running the following commands:
+## Project Guidelines & Context Files
 
-1. **Linting & Formatting**: 
-   ```bash
-   pnpm check
-   ```
-   *This runs Biome. All files must pass linting without warnings. See the Linting Rules section below.*
+To keep instructions modular and token-efficient, please review the specific context file corresponding to the area you are modifying:
 
-2. **Building & Testing**:
-   ```bash
-   pnpm build && pnpm -r test
-   ```
-   *Because the `examples/` workspaces consume the core framework, you MUST run `pnpm build` inside `packages/vitest-arch` before running the workspace tests (`pnpm -r test`).*
-
----
-
-## 1. Codebase Architecture & Design Principles
-
-* **Functional & Modular**: The framework strictly adheres to a functional architecture. Avoid ES6 classes unless absolutely necessary (e.g., Error boundaries or matchers that specifically require it). Use Data Transfer Objects (DTOs) and pure functions.
-* **Internal Architecture Enforcement**: The project uses its own capabilities to enforce its structure. 
-  * Look at `packages/vitest-arch/test/architecture.test.ts`.
-  * **File Naming Constraint**: Functions must have a name matching their filename (e.g., `ruleBuilder` must live in `ruleBuilder.ts`).
-  * Shared abstractions must live in `src/core/shared/` and be prefixed with `sharedCheck`.
-
-## 2. Linting Rules & Biome
-
-* **Strict Biome Compliance**: We use `biome` for all linting and formatting. 
-* **DO NOT** disable global rules in `biome.json`.
-* If you must use `any` (e.g., when mocking complex `ts.Program` objects in tests) or non-null assertions (`!`), use inline suppression comments with a justification:
-  ```typescript
-  // biome-ignore lint/suspicious/noExplicitAny: Mocking TS types for tests
-  const program = {} as any;
-  ```
-
-## 3. Rust Backend & NAPI Bindings
-
-The framework delegates all heavy lifting (AST parsing, graph traversal, cycle detection) to a blazing-fast native Rust crate (`packages/core-rust`).
-
-* **NAPI Bindings**: The Rust code is compiled to native binaries using `napi-rs`. When modifying the Rust backend, you must run `pnpm build` in the `core-rust` directory to regenerate the index files.
-* **Native State Isolation**: The `ArchestProject` instance is passed down via locators. Because Vitest deep-clones values passed to `expect()`, the native `archestProject` property is made non-enumerable to prevent Vitest from stripping its C++ pointers during test assertion logging.
-* **Vue/Svelte Support**: We extract the contents of `<script>` blocks from `.vue` and `.svelte` files and parse them using `tree-sitter` in the Rust engine.
-* **Testing Native Integrations**: When writing unit tests in TypeScript that require mock AST data, use the `createMockArchestProject` factory method from `testUtils.ts` to seamlessly bridge plain JSON mock definitions into a native `ArchestProject` instance.
-
-## 4. Testing Strategy
-
-* **Colocation**: All unit tests for the core logic must be colocated with their implementation (e.g., `locateClasses.test.ts` lives next to `locateClasses.ts` in `src/core/classes/`).
-* **Test Isolation**: The `testUtils.ts` file provides helpers like `createSourceFile` and `createMockProgram` for isolated unit testing. Avoid using `parseProject` for internal core unit tests, as it is heavy and meant for end-to-end usage.
-* **Test Exclusions**: The `tsconfig.json` explicitly excludes `src/**/*.test.ts`. This prevents test files from being evaluated by our internal architectural rules and keeps them out of the production npm bundle.
-
-## 5. Development Reminders
-
-* When modifying the `vite.config.ts`, remember to externalize Node built-ins appropriately (e.g., `node:path`, `node:fs`).
-* The unified regex-based API (`matchNamePattern`) supports both `RegExp` objects and strings. Make sure all locators (`FileLocator`, `ClassLocator`, etc.) consistently support this interface.
+1. **[Mandatory Workflow & Quality Control](file:///Users/jonathan/projects/vitest-arch/context/workflow.md)**
+   * Outlines the mandatory validation checks, Biome linting compliance, and development constraints.
+2. **[Codebase Architecture & Testing](file:///Users/jonathan/projects/vitest-arch/context/architecture.md)**
+   * Details functional patterns, file naming rules, test colocation strategies, and test exclusions.
+3. **[Rust Backend & NAPI Bindings](file:///Users/jonathan/projects/vitest-arch/context/rust.md)**
+   * Covers NAPI-RS Node bindings compilation, native state isolation, Svelte/Vue script extraction, and mock AST factory testing.
+4. **[JVM Integration (Java & Kotlin)](file:///Users/jonathan/projects/vitest-arch/context/jvm.md)**
+   * Details JDK 26/Foojay configurations, Java 17 bytecode constraints, JNA packaging, and Gradle jar task dependencies.
+5. **[Version Management & Release Flow](file:///Users/jonathan/projects/vitest-arch/context/releases.md)**
+   * Details monorepo version synchronization, Cargo manifests, dynamic Gradle properties, and the multi-platform CI/CD release workflow.
+6. **[User Documentation & Guides](file:///Users/jonathan/projects/vitest-arch/context/docs.md)**
+   * Details Docusaurus structures, multi-platform code tab conventions, API parity policies, and local documentation server verification.

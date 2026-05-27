@@ -77,18 +77,19 @@ export function parseProject(options: ParseProjectOptions = {}) {
       {
         extension: '.vue',
         isMixedContent: true,
-        scriptKind: ts.ScriptKind.TS,
+        scriptKind: ts.ScriptKind.Deferred,
       },
       {
         extension: '.svelte',
         isMixedContent: true,
-        scriptKind: ts.ScriptKind.TS,
+        scriptKind: ts.ScriptKind.Deferred,
       },
     ],
   );
 
   const archestProject = ArchestProject.parse(parsedCommandLine.fileNames);
   const projectData: ProjectData = JSON.parse(archestProject.getProjectData());
+  projectData.projectRoot = projectDir;
 
   return {
     projectData,

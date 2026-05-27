@@ -1,4 +1,5 @@
 import type { RuleResult } from '../types';
+import { hasPathSegment } from '../utils/paths';
 import { getFileDependencies } from './getFileDependencies';
 import type { FileLocatorData } from './types';
 
@@ -7,15 +8,20 @@ export function checkDependOnFilesInFolder(
   targetFolder: string,
   isNot: boolean,
 ): RuleResult {
+  if (locator.files.length === 0) {
+    return {
+      pass: false,
+      message: () => 'No files matched the selector. The rule is vacuous.',
+    };
+  }
+
   const violations: string[] = [];
 
   for (const file of locator.files) {
     const dependencies = getFileDependencies(file, locator.projectData);
 
-    const dependsOnTarget = dependencies.some(
-      (depPath) =>
-        depPath.includes(`/${targetFolder}/`) ||
-        depPath.includes(`\\${targetFolder}\\`),
+    const dependsOnTarget = dependencies.some((depPath) =>
+      hasPathSegment(depPath, targetFolder),
     );
 
     if (isNot && dependsOnTarget) {

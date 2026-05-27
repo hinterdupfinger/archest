@@ -41,3 +41,11 @@ packages/core-rust/index.d.ts
 
 # Packaging
 *.tgz
+
+.antigravitycli/
+
+# JVM Build & Generated Code
+jvm/.gradle/
+jvm/.kotlin/
+jvm/**/build/
+jvm/archest-core-java/src/main/kotlin/uniffi/archest_jvm/

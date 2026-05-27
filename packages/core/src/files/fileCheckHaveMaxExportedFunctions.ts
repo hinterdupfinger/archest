@@ -6,6 +6,13 @@ export function fileCheckHaveMaxExportedFunctions(
   max: number,
   isNot: boolean,
 ): RuleResult {
+  if (locator.files.length === 0) {
+    return {
+      pass: false,
+      message: () => 'No files matched the selector. The rule is vacuous.',
+    };
+  }
+
   const violations: string[] = [];
   for (const file of locator.files) {
     const exportedFuncCount = file.functions.filter(

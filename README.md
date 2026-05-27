@@ -3,62 +3,109 @@
 
 # Archest
 
-**Enforce strict architectural boundaries directly in your Vitest suite.**
+**Enforce strict architectural boundaries directly in Vitest, Jest, JUnit 6, or Kotest.**
 
-Archest is an architecture testing tool for TypeScript, heavily inspired by ArchUnit and Konsist. It allows you to assert formatting, naming, structural requirements, and dependency boundaries across your entire codebase using native Vitest matchers.
+Archest is an architecture testing tool for JavaScript, TypeScript, Java, and Kotlin, heavily inspired by ArchUnit and Konsist. It allows you to assert formatting, naming, structural requirements, and dependency boundaries across your entire codebase using native Vitest/Jest matchers or JUnit 6/Kotest assertions.
 
 ## Features
 
-- ⚡️ **Native Performance**: Parses your AST and builds dependency graphs natively using a blazing-fast Rust backend (`@archest/core-rust`) powered by `tree-sitter`. No heavy external Java dependencies.
-- 🧪 **Native Vitest Matchers**: Seamlessly hooks into Vitest. Get instant feedback on your architecture in your existing CI/CD pipelines right next to your unit tests.
+- ⚡️ **Native Performance**: Parses your AST and builds dependency graphs natively using a blazing-fast Rust backend (`@archest/core-rust`) powered by `tree-sitter`. Uses high-speed native JNI bindings in the JVM environment.
+- 🧪 **Multi-Platform Integration**: Seamlessly hooks into Vitest/Jest for JS/TS, and JUnit 6/Kotest for the JVM. Get instant feedback on your architecture in your existing CI/CD pipelines right next to your unit tests.
 - 🔄 **Cycle Detection**: Automatically traverses your dependency graph to prevent circular imports and spaghetti code at both the file and macro-domain level.
-- 🧱 **Layered Architecture**: Strictly enforce N-Tier architectures (e.g., UI -> Services -> Data Access) with a fluent API.
+- 🧱 **Layered Architecture**: Strictly enforce N-Tier architectures (e.g., UI -> Services -> Data Access) with a fluent, unified API.
 - 📏 **Structural Metrics**: Calculate and enforce maximum Cyclomatic Complexity, minimum Maintainability Index, and Distance from the Main Sequence.
-- 🏗 **Framework Agnostic**: Works perfectly with Next.js, NestJS, Vue, React, or vanilla TypeScript.
+- 🏗 **Framework Agnostic**: Works perfectly with Next.js, NestJS, Vue, React, Spring Boot, Quarkus, or vanilla Java/Kotlin projects.
 
 ## Quick Start
 
-### 1. Install
+### 1. JavaScript & TypeScript (Vitest / Jest)
 
+#### Install
 ```bash
+# For Vitest projects
 npm install -D @archest/vitest vitest
+
+# For Jest projects
+npm install -D @archest/jest jest
 ```
-*(Also available via `pnpm`, `yarn`, or `bun`)*
 
-### 2. Setup Matchers
-
-Create a setup file for Vitest or import the matchers directly in your test file:
-
+#### Write Test (Vitest)
 ```typescript
-// architecture.test.ts
 import { parseProject, setupMatchers } from '@archest/vitest';
 import { describe, it, expect } from 'vitest';
 
 setupMatchers();
 
 describe('Architecture Rules', () => {
-  // Automatically loads tsconfig.json. You can optionally pass `include` and `exclude` 
-  // arrays to explicitly filter which files are parsed by the Rust AST engine.
-  const project = parseProject({
-    exclude: ['**/*.test.ts']
-  });
+  const project = parseProject({ exclude: ['**/*.test.ts'] });
 
   it('UI components must not access database logic directly', () => {
     const uiComponents = project.getFiles({ inFolder: 'components/ui' });
     expect(uiComponents).not.toDependOnFilesInFolder('database');
   });
+});
+```
 
-  it('Controllers must reside in the controllers folder', () => {
-    const controllers = project.getClasses({ matchNamePattern: /Controller$/ });
-    expect(controllers).toResideInFolder('controllers');
+#### Write Test (Jest)
+```typescript
+import { parseProject, setupMatchers } from '@archest/jest';
+
+setupMatchers();
+
+describe('Architecture Rules', () => {
+  const project = parseProject({ exclude: ['**/*.test.ts'] });
+
+  it('UI components must not access database logic directly', () => {
+    const uiComponents = project.getFiles({ inFolder: 'components/ui' });
+    expect(uiComponents).not.toDependOnFilesInFolder('database');
   });
 });
 ```
 
-### 3. Run Tests
-
+#### Run
 ```bash
+# For Vitest
 vitest run architecture.test.ts
+
+# For Jest
+jest architecture.test.ts
+```
+
+### 2. JVM Environment (JUnit 6 / Kotest)
+
+#### Install (Gradle Kotlin DSL)
+Add the GitHub Packages maven repository and dependencies:
+```kotlin
+repositories {
+    mavenCentral()
+    maven { url = uri("https://maven.pkg.github.com/hinterdupfinger/archest") }
+}
+
+dependencies {
+    testImplementation("org.archest:archest-junit6:0.1.0")
+}
+```
+
+#### Write Test (JUnit 6)
+```java
+import org.archest.core.*;
+import org.archest.junit6.ArchestAssertions;
+import org.junit.jupiter.api.Test;
+
+public class ArchitectureTest {
+    @Test
+    public void testLayerBoundaries() {
+        ArchestProject project = ArchestProject.parse(files);
+        
+        FileLocator domain = project.getFiles(new FileQueryOptions().inFolder("domain"));
+        ArchestAssertions.assertThat(domain).notToDependOnFilesInFolder("infrastructure");
+    }
+}
+```
+
+#### Run
+```bash
+./gradlew test
 ```
 
 ## Documentation

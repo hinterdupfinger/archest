@@ -1,0 +1,16 @@
+[package]
+name = "archest-jvm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "archest_jvm"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+uniffi = { version = "0.28.0", features = ["cli"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+archest-core = { path = "../archest-core", default-features = false, features = ["jvm"] }
+
+

@@ -6,7 +6,7 @@
 
 # Interface: PropertyData
 
-Defined in: core/dist/dto.d.ts:73
+Defined in: core/dist/dto.d.ts:79
 
 Represents a class property or interface member extracted from the AST.
 
@@ -16,7 +16,7 @@ Represents a class property or interface member extracted from the AST.
 
 > **is\_readonly**: `boolean`
 
-Defined in: core/dist/dto.d.ts:77
+Defined in: core/dist/dto.d.ts:83
 
 True if the property is marked with the 'readonly' modifier.
 
@@ -26,6 +26,6 @@ True if the property is marked with the 'readonly' modifier.
 
 > **name**: `string`
 
-Defined in: core/dist/dto.d.ts:75
+Defined in: core/dist/dto.d.ts:81
 
 The name of the property.

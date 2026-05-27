@@ -7,12 +7,24 @@ export function fileCheckHaveMinMaintainabilityIndex(
   min: number,
   isNot: boolean,
 ): RuleResult {
+  if (locator.files.length === 0) {
+    return {
+      pass: false,
+      message: () => 'No files matched the selector. The rule is vacuous.',
+    };
+  }
+
   return sharedCheckHaveMinMaintainabilityIndex(
     locator.files,
     (f) => f.path,
     (file) => {
-      if (file.functions.length > 0) {
-        return file.functions[0].maintainability_index || 100;
+      const items = [...(file.functions || []), ...(file.classes || [])];
+      if (items.length > 0) {
+        const sum = items.reduce(
+          (acc, item) => acc + (item.maintainability_index || 0),
+          0,
+        );
+        return Math.round(sum / items.length);
       }
       return 100;
     },

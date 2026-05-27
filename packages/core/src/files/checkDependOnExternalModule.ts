@@ -6,6 +6,13 @@ export function checkDependOnExternalModule(
   moduleName: string | RegExp,
   isNot: boolean,
 ): RuleResult {
+  if (locator.files.length === 0) {
+    return {
+      pass: false,
+      message: () => 'No files matched the selector. The rule is vacuous.',
+    };
+  }
+
   const violations: string[] = [];
 
   const regex =
