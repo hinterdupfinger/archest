@@ -8,11 +8,11 @@ plugins {
 
 dependencies {
     api(kotlin("stdlib"))
-    api("net.java.dev.jna:jna:5.14.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.17.2")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+    api("net.java.dev.jna:jna:5.19.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.22.1")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
     api("org.jspecify:jspecify:1.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
 }
 
 // Locate the dynamic library compiled by Cargo
