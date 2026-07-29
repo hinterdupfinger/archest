@@ -8,7 +8,7 @@
     "@archest/vitest": "workspace:*"
   },
   "devDependencies": {
-    "vitest": "^4.1.5",
-    "typescript": "^5.x"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
   }
 }
