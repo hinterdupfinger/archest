@@ -46,7 +46,8 @@ Present a structured list of questions to resolve ambiguity:
 
 ## 3. Workflow Progression
 
-1.  **Audit**: Run discovery commands to map out the folder structures.
+1.  **Audit**: Run discovery commands to map out the folder structures and count files per layer to establish baseline expectations.
 2.  **Clarify**: Ask the user the questions above.
 3.  **Plan**: Draft the proposed rules in natural language in your implementation plan and obtain the user's explicit approval.
-4.  **Implement**: Write the architecture tests, verify them against the codebase, and verify the negative failure cases.
+4.  **Implement with Counter-Checks**: Write the architecture tests with mandatory source and target non-emptiness counter-checks (`toBeGreaterThan(0)`, `shouldNotBeEmpty()`) to eliminate vacuous false-positive passes.
+5.  **Verify Negative Failure Cases**: Deliberately inject a violation to confirm the test fails with clear, actionable diagnostics, then remove the violation.

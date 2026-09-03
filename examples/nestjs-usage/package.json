@@ -11,6 +11,6 @@
   "devDependencies": {
     "@nestjs/common": "^10.4.22",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.0"
   }
 }

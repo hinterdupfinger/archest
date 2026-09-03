@@ -52,9 +52,11 @@ jobs:
         run: cargo build --release -p archest-jvm
         working-directory: packages/core-rust
 
-      - name: Build UniFFI bindgen (Linux only)
+      - name: Build UniFFI bindgen and generate Kotlin bindings (Linux only)
         if: runner.os == 'Linux'
-        run: cargo build --release -p archest-jvm --bin uniffi-bindgen
+        run: |
+          cargo build --release -p archest-jvm --bin uniffi-bindgen
+          ./target/release/uniffi-bindgen generate --library target/release/libarchest_jvm.so --language kotlin --out-dir target/release
         working-directory: packages/core-rust
 
       - name: Upload Artifacts
@@ -68,6 +70,7 @@ jobs:
             packages/core-rust/target/release/deps/libarchest_jvm.*
             packages/core-rust/target/release/deps/archest_jvm.*
             packages/core-rust/target/release/uniffi-bindgen
+            packages/core-rust/target/release/uniffi/**
           if-no-files-found: warn
 
   test:
@@ -123,8 +126,13 @@ jobs:
           name: native-bindings-Linux
           path: packages/core-rust
 
-      - name: Make bindgen executable
-        run: chmod +x packages/core-rust/target/release/uniffi-bindgen
+      - name: Setup UniFFI bindings
+        run: |
+          chmod +x packages/core-rust/target/release/uniffi-bindgen || true
+          if [ -d packages/core-rust/target/release/uniffi ]; then
+            mkdir -p jvm/archest-core-java/src/main/kotlin
+            cp -r packages/core-rust/target/release/uniffi jvm/archest-core-java/src/main/kotlin/
+          fi
 
       - name: Run JVM tests
         run: ./gradlew test
@@ -197,8 +205,13 @@ jobs:
           merge-multiple: true
           path: packages/core-rust
 
-      - name: Make bindgen executable
-        run: chmod +x packages/core-rust/target/release/uniffi-bindgen
+      - name: Setup UniFFI bindings
+        run: |
+          chmod +x packages/core-rust/target/release/uniffi-bindgen || true
+          if [ -d packages/core-rust/target/release/uniffi ]; then
+            mkdir -p jvm/archest-core-java/src/main/kotlin
+            cp -r packages/core-rust/target/release/uniffi jvm/archest-core-java/src/main/kotlin/
+          fi
 
       - name: Publish JVM packages to GitHub Packages
         run: ./gradlew publish

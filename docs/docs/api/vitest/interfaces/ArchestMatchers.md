@@ -6,7 +6,7 @@
 
 # Interface: ArchestMatchers\<_R\>
 
-Defined in: [vitest/src/matchers/models.ts:7](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L7)
+Defined in: [vitest/src/matchers/models.ts:7](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L7)
 
 Native Vitest Matchers provided by Archest for architectural testing.
 
@@ -25,7 +25,7 @@ on your codebase's architectural structure.
 
 > **toBeFreeOfCycles**(): `void`
 
-Defined in: [vitest/src/matchers/models.ts:146](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L146)
+Defined in: [vitest/src/matchers/models.ts:146](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L146)
 
 Analyzes the AST dependency graph and asserts that the queried elements are entirely free of circular dependencies.
 Supports FileLocators and SliceLocators.
@@ -47,7 +47,7 @@ expect(domainFiles).toBeFreeOfCycles();
 
 > **toBeReadonly**(): `void`
 
-Defined in: [vitest/src/matchers/models.ts:105](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L105)
+Defined in: [vitest/src/matchers/models.ts:105](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L105)
 
 Asserts that the located properties are marked as readonly.
 Supports PropertyLocators.
@@ -69,7 +69,7 @@ expect(dtoProps).toBeReadonly();
 
 > **toDependOnExternalModule**(`moduleName`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:134](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L134)
+Defined in: [vitest/src/matchers/models.ts:134](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L134)
 
 Asserts that a file locator depends on a specific external module (e.g. from node_modules).
 Supports FileLocators.
@@ -102,7 +102,7 @@ it('should only use gql-tada inside the graphql module', () => {
 
 > **toDependOnFilesInFolder**(`folder`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:118](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L118)
+Defined in: [vitest/src/matchers/models.ts:118](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L118)
 
 Asserts that the located files import dependencies from the specified folder.
 Supports FileLocators.
@@ -132,7 +132,7 @@ expect(uiFiles).not.toDependOnFilesInFolder('database');
 
 > **toExtendClass**(`className`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:68](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L68)
+Defined in: [vitest/src/matchers/models.ts:68](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L68)
 
 Asserts that the located classes extend the specified base class.
 Supports ClassLocators.
@@ -162,7 +162,7 @@ expect(repositories).toExtendClass('BaseRepository');
 
 > **toHaveExplicitReturnType**(): `void`
 
-Defined in: [vitest/src/matchers/models.ts:93](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L93)
+Defined in: [vitest/src/matchers/models.ts:93](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L93)
 
 Asserts that the located functions have an explicit TypeScript return type.
 Supports FunctionLocators.
@@ -184,7 +184,7 @@ expect(domainFunctions).toHaveExplicitReturnType();
 
 > **toHaveMaxCyclomaticComplexity**(`max`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:172](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L172)
+Defined in: [vitest/src/matchers/models.ts:172](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L172)
 
 Computes the cyclomatic complexity of the AST and asserts it is less than or equal to the maximum.
 Supports FileLocators, ClassLocators, and FunctionLocators.
@@ -214,7 +214,7 @@ expect(coreFunctions).toHaveMaxCyclomaticComplexity(10);
 
 > **toHaveMaxDistanceFromMainSequence**(`max`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:198](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L198)
+Defined in: [vitest/src/matchers/models.ts:198](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L198)
 
 Computes the Robert C. Martin Distance from the Main Sequence for the slice and asserts it is less than or equal to the maximum.
 Supports SliceLocators.
@@ -244,7 +244,7 @@ expect(slices).toHaveMaxDistanceFromMainSequence(0.3);
 
 > **toHaveMaxExportedFunctions**(`max`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:223](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L223)
+Defined in: [vitest/src/matchers/models.ts:223](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L223)
 
 Asserts that the located file does not export more than the specified maximum number of functions.
 Supports FileLocators.
@@ -274,7 +274,7 @@ expect(utils).toHaveMaxExportedFunctions(5);
 
 > **toHaveMinMaintainabilityIndex**(`min`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:185](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L185)
+Defined in: [vitest/src/matchers/models.ts:185](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L185)
 
 Computes the maintainability index based on Halstead metrics and asserts it is greater than or equal to the minimum.
 Supports FileLocators and FunctionLocators.
@@ -304,7 +304,7 @@ expect(coreFiles).toHaveMinMaintainabilityIndex(65);
 
 > **toHaveModifier**(`modifier`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:47](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L47)
+Defined in: [vitest/src/matchers/models.ts:47](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L47)
 
 Asserts that the located elements have the specified TypeScript modifier.
 Supports ClassLocators and FunctionLocators.
@@ -334,7 +334,7 @@ expect(helpers).toHaveModifier('export');
 
 > **toHaveNameMatchingFileName**(): `void`
 
-Defined in: [vitest/src/matchers/models.ts:210](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L210)
+Defined in: [vitest/src/matchers/models.ts:210](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L210)
 
 Asserts that the exported class or function name exactly matches the name of its parent file.
 Supports ClassLocators and FunctionLocators.
@@ -356,7 +356,7 @@ expect(allFunctions).toHaveNameMatchingFileName();
 
 > **toImplementInterface**(`interfaceName`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:81](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L81)
+Defined in: [vitest/src/matchers/models.ts:81](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L81)
 
 Asserts that the located classes implement the specified interface.
 Supports ClassLocators.
@@ -386,7 +386,7 @@ expect(useCases).toImplementInterface('IUseCase');
 
 > **toMatchNamePattern**(`pattern`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:159](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L159)
+Defined in: [vitest/src/matchers/models.ts:159](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L159)
 
 Asserts that the name of the located element matches the provided string or RegExp pattern.
 Supports FileLocators, ClassLocators, and FunctionLocators.
@@ -416,7 +416,7 @@ expect(controllers).toMatchNamePattern(/Controller$/);
 
 > **toPass**(): `void`
 
-Defined in: [vitest/src/matchers/models.ts:21](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L21)
+Defined in: [vitest/src/matchers/models.ts:21](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L21)
 
 Asserts that the evaluated architectural rule passes.
 Primarily used for complex rules like LayeredArchitecture.
@@ -441,7 +441,7 @@ expect(architecture.whereLayer('Domain').shouldNotAccessAnyLayer().check()).toPa
 
 > **toResideInFolder**(`folder`): `void`
 
-Defined in: [vitest/src/matchers/models.ts:34](https://github.com/hinterdupfinger/archest/blob/5523fe6cbd350e0c0709c1452eecb72895034fa6/packages/vitest/src/matchers/models.ts#L34)
+Defined in: [vitest/src/matchers/models.ts:34](https://github.com/hinterdupfinger/archest/blob/8e27924376bf3372ef4be5641134f438dd495772/packages/vitest/src/matchers/models.ts#L34)
 
 Asserts that the located elements physically reside within the specified folder.
 Supports ClassLocators.

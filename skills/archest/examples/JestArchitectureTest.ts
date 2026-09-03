@@ -9,6 +9,12 @@ describe('Application Layer Architecture (Jest)', () => {
 
   it('domain should not depend on infrastructure', () => {
     const domain = project.getFiles({ inFolder: 'domain' });
+    const infra = project.getFiles({ inFolder: 'infrastructure' });
+
+    // Counter-checks: ensure selectors found files
+    expect(domain.files.length).toBeGreaterThan(0);
+    expect(infra.files.length).toBeGreaterThan(0);
+
     expect(domain).not.toDependOnFilesInFolder('infrastructure');
   });
 });
