@@ -9,8 +9,8 @@ plugins {
 dependencies {
     api(kotlin("stdlib"))
     api("net.java.dev.jna:jna:5.19.1")
-    api("com.fasterxml.jackson.core:jackson-databind:2.22.1")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.22.2")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.2")
     api("org.jspecify:jspecify:1.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
 }
@@ -20,10 +20,23 @@ val cargoOutputDir = file("../../packages/core-rust/target/release")
 val cargoDepsDir = file("../../packages/core-rust/target/release/deps")
 
 val generateBindings = tasks.register("generateUniFFIBindings") {
+    onlyIf {
+        !file("src/main/kotlin/uniffi/archest_jvm/archest_jvm.kt").exists()
+    }
+
     doLast {
-        // Find compiled dynamic library (.dylib, .so, or .dll)
+        // Find compiled dynamic library (.dylib, .so, or .dll) for current OS
+        val osName = System.getProperty("os.name").lowercase()
+        val expectedExt = when {
+            osName.contains("win") -> ".dll"
+            osName.contains("mac") -> ".dylib"
+            else -> ".so"
+        }
         val allFiles = (cargoOutputDir.listFiles()?.toList() ?: emptyList()) + (cargoDepsDir.listFiles()?.toList() ?: emptyList())
         val libFile = allFiles.firstOrNull { file ->
+            val name = file.name
+            (name.startsWith("libarchest_jvm") || name.startsWith("archest_jvm")) && name.endsWith(expectedExt)
+        } ?: allFiles.firstOrNull { file ->
             val name = file.name
             (name.startsWith("libarchest_jvm") || name.startsWith("archest_jvm")) &&
                     (name.endsWith(".dylib") || name.endsWith(".so") || name.endsWith(".dll"))
@@ -32,7 +45,7 @@ val generateBindings = tasks.register("generateUniFFIBindings") {
         println("Found native library: ${libFile.absolutePath}")
 
         // Run uniffi-bindgen to generate Kotlin source files
-        val bindgenBin = if (System.getProperty("os.name").lowercase().contains("win")) {
+        val bindgenBin = if (osName.contains("win")) {
             File(cargoOutputDir, "uniffi-bindgen.exe")
         } else {
             File(cargoOutputDir, "uniffi-bindgen")

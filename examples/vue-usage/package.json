@@ -9,11 +9,11 @@
     "@archest/vitest": "workspace:*"
   },
   "devDependencies": {
-    "@vue/compiler-sfc": "^3.5.40",
+    "@vue/compiler-sfc": "^3.5.42",
     "gql.tada": "^1.11.3",
     "graphql": "^16.14.2",
     "typescript": "^5.9.3",
     "villus": "^3.5.2",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.0"
   }
 }

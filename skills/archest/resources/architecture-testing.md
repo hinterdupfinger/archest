@@ -43,34 +43,182 @@ Enforcing naming conventions aligns code with its functional role.
 
 ---
 
-## 4. Best Practices for Architecture Tests
+## 4. Counter-Checks & The Vacuous Rule Pitfall (CRITICAL)
 
-To prevent architectural tests from becoming flaky or burdensome, follow these industry best practices:
+The single most dangerous failure mode in architectural testing is the **vacuous test** (or false-positive pass). 
 
-*   **Focus on High-Value Rules First**: Start by enforcing rules that prevent major structural failures (like circular dependencies and domain-layer coupling). Do not write rules for trivial details.
-*   **Treat Tests as Living Documentation**: Name your tests descriptively (e.g., `domain_layer_must_not_depend_on_infrastructure_layer`). This turns your test suite into an active, executable map of your architecture for new developers.
-*   **Keep Rules Independent**: Write one test per rule. If a check fails, the test name should point directly to the specific architectural boundary that was breached.
-*   **Run on Every Commit**: Add architectural checks to your pre-commit hooks or CI/CD pipelines. This stops violations from ever being merged into main.
-*   **Scope Cycle Detection Wisely**: Checking for circular dependencies across an entire massive monorepo is highly CPU-intensive. Run cycle checks on specific domain boundaries or slices to keep your test suites fast.
+### What is a Vacuous Test?
+A test passes *vacuously* when the selector query matches **zero** elements (due to a typo, an empty folder, a renamed directory, or an overly restrictive predicate). 
+
+For example, consider this negative rule:
+```typescript
+it('domain should not depend on infrastructure', () => {
+  const domain = project.getFiles({ inFolder: 'domain' });
+  expect(domain).not.toDependOnFilesInFolder('infrastructure');
+});
+```
+*   **The Trap**: If someone mistypes `'dmain'` or the `domain/` directory is moved/empty, `domain.files` has length `0`.
+*   **Inverted Assertion Inversion**: In Vitest and Jest, custom matchers returning `pass: false` when 0 files match are inverted by `.not` (`!false` -> `true`). The test passes with a green checkmark!
+*   **Target Invalidation**: If the `infrastructure/` folder is deleted or renamed to `infra/`, the check will never trigger any violations—giving false confidence while architecture drifts unchecked.
+
+### Mandatory Counter-Check Pattern
+
+To prevent vacuous passes, **every architecture test must include explicit counter-checks**:
+
+#### 1. Source Non-Emptiness Counter-Check
+Assert that your source selector matched at least one element before evaluating constraints:
+```typescript
+// TypeScript (Vitest / Jest)
+const domain = project.getFiles({ inFolder: 'domain' });
+expect(domain.files.length).toBeGreaterThan(0); // Source counter-check!
+expect(domain).not.toDependOnFilesInFolder('infrastructure');
+```
+```java
+// Java (JUnit 6)
+FileLocator domain = project.getFiles(new FileQueryOptions().inFolder("domain"));
+assertFalse(domain.getFiles().isEmpty(), "Counter-check: 'domain' folder must contain files");
+ArchestAssertions.assertThat(domain).notToDependOnFilesInFolder("infrastructure");
+```
+```kotlin
+// Kotlin (Kotest)
+val domain = project.getFiles(FileQueryOptions(inFolder = "domain"))
+domain.files.shouldNotBeEmpty() // Counter-check!
+domain shouldNotDependOnFilesInFolder "infrastructure"
+```
+
+#### 2. Target Boundary Sanity Counter-Check
+Assert that the forbidden target boundary actually exists and contains files in the analyzed project:
+```typescript
+const infrastructure = project.getFiles({ inFolder: 'infrastructure' });
+expect(infrastructure.files.length).toBeGreaterThan(0); // Target counter-check!
+```
 
 ---
 
-## 5. Implementation Strategy: Step-by-Step Guide
+## 5. Catalog of Best Architecture Tests to Include
 
-When writing or modifying architecture tests, follow this sequence to ensure they are robust and correct:
+When designing an architectural test suite, prioritize these **6 high-value test archetypes** based on industry standards (ArchUnit, Clean Architecture, DDD, and Evolutionary Fitness Functions):
 
-### Step 1: Draft the Natural Language Rule
-Before writing code, clearly formulate the rule and its rationale. E.g., *"Repositories must not import Controllers. Rationale: Data access layers should be decoupled from delivery mechanisms."*
-
-### Step 2: Implement the Test DSL
-Isolate the source component using queries and write the assertions. 
-*   **Vitest example**:
+### 1. Inward Dependency Enforcement (Clean / Hexagonal / Onion)
+*   **Concept**: Dependencies must strictly point inward toward the domain. Domain entities and use cases must never know about delivery mechanisms (web/UI), data persistence (DB/ORM), or external infrastructure.
+*   **Pattern**:
     ```typescript
-    it('repositories must not depend on controllers', () => {
-      const repositories = project.getFiles({ inFolder: 'repositories' });
-      expect(repositories).not.toDependOnFilesInFolder('controllers');
+    it('domain must remain pure and free from infrastructure dependencies', () => {
+      const domain = project.getFiles({ inFolder: 'domain' });
+      const infra = project.getFiles({ inFolder: 'infrastructure' });
+      expect(domain.files.length).toBeGreaterThan(0);
+      expect(infra.files.length).toBeGreaterThan(0);
+      expect(domain).not.toDependOnFilesInFolder('infrastructure');
     });
     ```
+
+### 2. Framework & Persistence Agnosticism (Zero Framework Bleed)
+*   **Concept**: Domain logic must not leak dependencies on ORMs (Prisma, TypeORM, Mongoose, Hibernate/JPA) or HTTP transport frameworks (Express, Fastify, NestJS, Spring Web).
+*   **Pattern**:
+    ```typescript
+    it('domain layer must not depend on external database ORMs or transport libraries', () => {
+      const domain = project.getFiles({ inFolder: 'domain' });
+      expect(domain.files.length).toBeGreaterThan(0);
+      expect(domain).not.toDependOnExternalModule('@prisma/client');
+      expect(domain).not.toDependOnExternalModule('typeorm');
+      expect(domain).not.toDependOnExternalModule('express');
+    });
+    ```
+
+### 3. Circular Dependency & Cycle Elimination
+*   **Concept**: Cycles between packages, files, or domain slices lead to tight coupling, memory leaks, and fragile codebases that cannot be tested or deployed independently.
+*   **Pattern**:
+    ```typescript
+    it('feature slices must be completely free of cyclic dependencies', () => {
+      const slices = project.getSlices('src/modules/*');
+      expect(slices.slices.length).toBeGreaterThan(0);
+      expect(slices).toBeFreeOfCycles();
+    });
+
+    it('core files must not form dependency cycles', () => {
+      const coreFiles = project.getFiles({ inFolder: 'core' });
+      expect(coreFiles.files.length).toBeGreaterThan(0);
+      expect(coreFiles).toBeFreeOfCycles();
+    });
+    ```
+
+### 4. Cross-Slice Isolation (DDD / Feature-Sliced Design / Modular Monolith)
+*   **Concept**: Autonomous feature slices (e.g. `billing`, `auth`, `catalog`, `orders`) must not import private internal files of other slices. Communication must occur strictly via public interfaces or shared contracts.
+*   **Pattern**:
+    ```typescript
+    it('billing slice must not reach into private auth internals', () => {
+      const billing = project.getFiles({ inFolder: 'modules/billing' });
+      expect(billing.files.length).toBeGreaterThan(0);
+      expect(billing).not.toDependOnFilesInFolder('modules/auth/internal');
+    });
+    ```
+
+### 5. Structural, Naming & Contract Symmetry
+*   **Concept**: Enforces code organization by role. Classes placed in specific folders must honor naming and interface contracts, maintaining consistency across large teams.
+*   **Pattern**:
+    ```typescript
+    it('classes in controllers must end with Controller and reside in correct folder', () => {
+      const controllers = project.getClasses({ inFolder: 'controllers' });
+      expect(controllers.classes.length).toBeGreaterThan(0);
+      expect(controllers).toMatchNamePattern(/Controller$/);
+      expect(controllers).toResideInFolder('controllers');
+    });
+
+    it('repository classes must implement IRepository and end with Repository', () => {
+      const repos = project.getClasses({ matchNamePattern: /Repository$/ });
+      expect(repos.classes.length).toBeGreaterThan(0);
+      expect(repos).toImplementInterface('IRepository');
+    });
+
+    it('exported classes and functions must match their parent file names', () => {
+      const services = project.getClasses({ inFolder: 'services' });
+      expect(services.classes.length).toBeGreaterThan(0);
+      expect(services).toHaveNameMatchingFileName();
+    });
+    ```
+
+### 6. Architectural Fitness & Maintainability Metrics
+*   **Concept**: Protect against "god classes" and unmaintainable legacy spikes by establishing quantifiable complexity thresholds.
+*   **Pattern**:
+    ```typescript
+    it('domain functions must enforce strict complexity and maintainability limits', () => {
+      const domainFunctions = project.getFunctions({ inFolder: 'domain' });
+      expect(domainFunctions.functions.length).toBeGreaterThan(0);
+      expect(domainFunctions).toHaveMaxCyclomaticComplexity(10);
+      expect(domainFunctions).toHaveMinMaintainabilityIndex(65);
+      expect(domainFunctions).toHaveExplicitReturnType();
+    });
+
+    it('architecture slices must stay close to the Main Sequence (balanced abstraction/stability)', () => {
+      const slices = project.getSlices('src/packages/*');
+      expect(slices.slices.length).toBeGreaterThan(0);
+      expect(slices).toHaveMaxDistanceFromMainSequence(0.3);
+    });
+    ```
+
+---
+
+## 6. Implementation Strategy: Step-by-Step Guide
+
+When writing or modifying architecture tests, follow this sequence:
+
+### Step 1: Draft the Natural Language Rule & Counter-Check Requirement
+Formulate the rule and define the expected minimum element count. E.g., *"Repositories must not import Controllers. Both folders must contain files in src/."*
+
+### Step 2: Implement the Test DSL with Explicit Counter-Checks
+```typescript
+it('repositories must not depend on controllers', () => {
+  const repositories = project.getFiles({ inFolder: 'repositories' });
+  const controllers = project.getFiles({ inFolder: 'controllers' });
+
+  // 1. Source & target counter-checks
+  expect(repositories.files.length).toBeGreaterThan(0);
+  expect(controllers.files.length).toBeGreaterThan(0);
+
+  // 2. Architectural constraint
+  expect(repositories).not.toDependOnFilesInFolder('controllers');
+});
+```
 
 ### Step 3: Relentlessly Verify the Negative Case (Failure Mode Test)
 An architecture test is only useful if it fails when it should. **Always test the negative case**:
@@ -80,6 +228,7 @@ An architecture test is only useful if it fails when it should. **Always test th
 4.  Remove the temporary violation and confirm the test passes.
 
 ### Step 4: Handle Exceptions Gracefully
-If there is a legitimate legacy exception that violates the rule, **do not disable the rule globally**.
-*   Instead, narrow the scope of the check by excluding the file using the query options (e.g., adding it to `exclude` patterns in `parseProject` or filtering it out in your Java/Kotlin query options).
+If there is a legitimate legacy exception that violates the rule, **do not disable the rule globally**:
+*   Narrow the scope by excluding the file in `parseProject({ exclude: [...] })` or filtering query options.
 *   Add a comment explaining the technical debt and why the exception exists.
+

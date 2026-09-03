@@ -23,15 +23,8 @@ export { type ArchestMatchers, setupMatchers } from './matchers';
 import type { ArchestMatchers } from './matchers';
 
 declare module 'vitest' {
-  // biome-ignore lint/suspicious/noExplicitAny: Matcher signature
-  interface Assertion<T = any> extends ArchestMatchers<T> {}
-  // biome-ignore lint/suspicious/noExplicitAny: Matcher signature
-  interface AsymmetricMatchersContaining extends ArchestMatchers<any> {}
-}
-
-declare module '@vitest/expect' {
-  // biome-ignore lint/suspicious/noExplicitAny: Matcher signature
-  interface Assertion<T = any> extends ArchestMatchers<T> {}
+  interface Assertion<R extends void | Promise<void> = void, T = unknown>
+    extends ArchestMatchers<R> {}
   // biome-ignore lint/suspicious/noExplicitAny: Matcher signature
   interface AsymmetricMatchersContaining extends ArchestMatchers<any> {}
 }

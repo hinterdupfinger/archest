@@ -1,6 +1,6 @@
 {
   "name": "@archest/core-rust",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "private": true,
   "main": "index.js",
   "types": "index.d.ts",

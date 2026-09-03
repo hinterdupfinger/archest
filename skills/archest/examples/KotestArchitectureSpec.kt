@@ -1,6 +1,7 @@
 package org.archest.examples
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import org.archest.core.*
 import org.archest.kotest.*
 import java.io.File
@@ -11,12 +12,16 @@ class KotestArchitectureSpec : StringSpec({
         locateSourceFiles(File("src/main/kotlin"), files)
         val project = ArchestProject.parse(files)
 
-        // 1. Files in domain should not depend on infrastructure
+        // 1. Files in domain should not depend on infrastructure (with counter-checks)
         val domain = project.getFiles(FileQueryOptions().inFolder("domain"))
+        val infra = project.getFiles(FileQueryOptions().inFolder("infrastructure"))
+        domain.files.shouldNotBeEmpty()
+        infra.files.shouldNotBeEmpty()
         domain shouldNotDependOnFilesInFolder "infrastructure"
 
-        // 2. Class naming rules
+        // 2. Class naming rules (with counter-check)
         val services = project.getClasses(ClassQueryOptions().inFolder("services"))
+        services.classes.shouldNotBeEmpty()
         services shouldMatchNamePattern ".*Service$"
 
         // 3. Layered architecture validation
